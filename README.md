@@ -8,8 +8,8 @@ Este site permite que usuários explorem, avaliem e gerenciem filmes, com funcio
 
 # 🛠️ Tecnologias Utilizadas
 - **Laravel** - Backend e gerenciamento de rotas 
+- **Blade** - Sistema de templates para renderização de views no Laravel
 - **PHP** - Lógica de servidor
-- **React** - Interface dinâmica e responsiva
 - **HTML & CSS** - Estrutura e estilo da aplicação 
 - **PostgreSQL** - Banco de dados relacional
 - **Python** - Web scraping para popular filmes e gêneros 
