@@ -2,9 +2,7 @@
 CineTrack_Web é um projeto acadêmico desenvolvido para a disciplina de Desenvolvimento Web. O objetivo é criar uma plataforma interativa de avaliação de filmes, incorporando desde fundamentos básicos da web até práticas avançadas de segurança e integração de tecnologias modernas.
 
 # 🚀 Visão Geral
-Este site permite que usuários explorem, avaliem e gerenciem filmes, com funcionalidades completas de CRUD e scraping automatizado para popular dados. Além disso, o projeto implementa medidas robustas de segurança, como:
-- Proteção contra CSRF via tokens
-- Cookies seguros com atributos HttpOnly e SameSite
+Este site permite que usuários explorem, avaliem e gerenciem filmes, com funcionalidades completas de CRUD e scraping automatizado para popular dados. Além disso, o projeto implementa medidas robustas de segurança, como proteção contra CSRF via tokens e cookies seguros com atributos HttpOnly e SameSite.
 
 # 🛠️ Tecnologias Utilizadas
 - **Laravel** - Backend e gerenciamento de rotas 
@@ -22,12 +20,5 @@ Este site permite que usuários explorem, avaliem e gerenciem filmes, com funcio
 
 # 🔐 Segurança
 O projeto aplica boas práticas de segurança para proteger dados e sessões:
-- Tokens CSRF para prevenir ataques de falsificação de requisições
-- Cookies configurados com HttpOnly e SameSite para evitar acesso indevido e vazamento de sessão
-
-# 📚 Objetivo Acadêmico
-Este projeto foi desenvolvido como parte da disciplina de Desenvolvimento Web, com foco em aplicar conceitos teóricos em um cenário prático e funcional. Ele demonstra domínio em:
-- Integração de frontend e backend
-- Gerenciamento de banco de dados
-- Implementação de segurança web
-- Automação com scraping
+- Tokens `CSRF` para prevenir ataques de falsificação de requisições
+- Cookies configurados com `HttpOnly` e `SameSite` para evitar acesso indevido e vazamento de sessão
