@@ -11,7 +11,9 @@ No início, o foco será usuários online com o objetivo de disponibilizar um es
 
 ## 3) Casos de uso (de forma simples)
 **Todos**: Logar/deslogar, configuração conta, CRUD `avaliacao`
+
 **Usuário**: CRUD `user` (inserir, editar, remover), CRUD `movies` (listar), CRUD `rating` (inserir, listar, editar, remover)
+
 **Adm**: CRUD de `movies` (inserir, listar, editar, remover), CRUD de `rating` (listar, remover)
 
 ## 4) Limites e suposições
@@ -27,8 +29,10 @@ min para teste rápido.
 Plano B: sem internet → rodar local e salvar em arquivo/LocalStorage; sem tempo do
 professor → testar com 3 colegas. -->
 **Limites**: entrega ginal até o fim da disciplina (12/25), rodar no navegador, sem serviços pagos.
+
 **Suposições**: internet no laboratório; navegador atualizado; acesso ao GitHub; 10
 min para teste rápido.
+
 **Plano B**: customizar o código com o que está funcionando
 
 ## 5) Hipóteses + validação
@@ -42,8 +46,11 @@ cada 10).
 Validação: medir no protótipo com 30 ações; meta: pelo menos 27 de 30 ações (9/10)
 em 1s ou menos. -->
 **H-Valor**: Se usuário tem um espaço para opinar, se sente mais confortável em se expressar e melhora o humor.
+
 **Validação** (`rating`): teste com 5 usuários; sucesso se ≥4 avaliam com comentários e nota; falha se ≥4 avaliam com apenas nota; alvo: rating com nota e comentário.
+
 **H-Viabilidade**: Com app no navegador (flutter), criar e responder requisições sem disparar erros.
+
 **Validação** (`no_error`): medir no protótipo com 10 ações; meta: mínimo de erros disparados.
 
 ## 6) Fluxo principal e primeira fatia
@@ -67,7 +74,9 @@ some ou marca "fechado". -->
 6) Clica em "Enviar"
    
 **Primeira fatia vertical (escopo mínimo):**
+
 Inclui: login, valida dados no Firebase, retorna mensagem de erro ou entra no site, carrega lista de filmes.
+
 Critérios de aceite:
 - Sucesso ao validar dados
 
