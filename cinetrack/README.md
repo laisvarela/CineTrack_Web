@@ -6,6 +6,7 @@ No início, o foco será usuários online com o objetivo de disponibilizar um es
 
 ## 2) Atores e Decisores (quem usa / quem decide)
 **Usuários principais**: Usuários online
+
 **Decisores/Apoiadores**: Adm
 
 ## 3) Casos de uso (de forma simples)
