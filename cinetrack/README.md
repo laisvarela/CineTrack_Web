@@ -10,7 +10,7 @@ No início, o foco será usuários online com o objetivo de disponibilizar um es
 **Decisores/Apoiadores**: Adm
 
 ## 3) Casos de uso (de forma simples)
-**Todos**: Logar/deslogar, configuração conta, CRUD `avaliacao`
+**Todos**: Logar/deslogar, configuração conta, CRUD `rating`
 
 **Usuário**: CRUD `user` (inserir, editar, remover), CRUD `movies` (listar), CRUD `rating` (inserir, listar, editar, remover)
 
@@ -94,49 +94,63 @@ Critérios de aceite:
 ## 8) Tecnologias
 <!-- Liste apenas o que você REALMENTE pretende usar agora. -->
 ### 8.1 Navegador
-**Navegador:** [HTML/CSS/JS | React/Vue/Bootstrap/etc., se houver]
-**Armazenamento local (se usar):** [LocalStorage/IndexedDB/—]
-**Hospedagem:** [GitHub Pages/—]
+**Navegador:** Flutter/Dart
+**Armazenamento local (se usar):** LocalStorage
+**Hospedagem:** GitHub Pages
 ### 8.2 Front-end (servidor de aplicação, se existir)
-**Front-end (servidor):** [ex.: Next.js/React/—]
-**Hospedagem:** [ex.: Vercel/—]
+**Front-end (servidor):** -
+**Hospedagem:**  -
 ### 8.3 Back-end (API/servidor, se existir)
-**Back-end (API):** [ex.: FastAPI/Express/PHP/Laravel/Spring/—]
-**Banco de dados:** [ex.: SQLite/Postgres/MySQL/MongoDB/—]
-**Deploy do back-end:** [ex.: Render/Railway/—]
+**Back-end (API):** Python
+**Banco de dados:** Firebase
+**Deploy do back-end:** -
 ## 9) Plano de Dados (Dia 0) — somente itens 1–3
-<!-- Defina só o essencial para criar o banco depois. -->
 ### 9.1 Entidades
 <!-- EXEMPLO:
 - Usuario — pessoa que usa o sistema (aluno/professor)
 - Chamado — pedido de ajuda criado por um usuário -->
-- [Entidade 1] — [o que representa em 1 linha]
-- [Entidade 2] — [...]
-- [Entidade 3] — [...]
+- [User] — usuario pode ser user ou admin
+- [Movie] — filmes cadastrados
+- [Rating] - avaliacoes relacionadas a movie e user
+
 ### 9.2 Campos por entidade
 <!-- Use tipos simples: uuid, texto, número, data/hora, booleano, char. -->
-### Usuario
+### User
 | Campo | Tipo | Obrigatório | Exemplo |
 |-----------------|-------------------------------|-------------|--------------------|
 | id | número | sim | 1 |
 | nome | texto | sim | "Ana Souza" |
 | email | texto | sim (único) | "ana@exemplo.com" |
 | senha_hash | texto | sim | "$2a$10$..." |
-| papel | número (0=aluno, 1=professor) | sim | 0 |
+| papel | texto (USER;ADMIN) | sim | 0 |
 | dataCriacao | data/hora | sim | 2025-08-20 14:30 |
 | dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
-### Chamado
+### Movie
 | Campo | Tipo | Obrigatório | Exemplo |
 |-----------------|--------------------|-------------|-------------------------|
 | id | número | sim | 2 |
-| Usuario_id | número (fk) | sim | 8f3a-... |
-| texto | texto | sim | "Erro ao compilar" |
-| estado | char | sim | 'a' \| 'f' |
-| dataCriacao | data/hora | sim | 2025-08-20 14:35 |
-| dataAtualizacao | data/hora | sim | 2025-08-20 14:50 |
+| titulo | texto | sim | "Senhor dos Anéis" |
+| urlCapa | texto | sim | |
+| ano | número | sim | 1972 |
+| sinopse | texto | sim | "Amigos em uma jornada para queimar o anel" |
+| diretores | array | sim | [texto] |
+| generos | array | sim | [texto] |
+| dataCriacao | data/hora | sim | 2025-08-20 14:30 |
+| dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
+
+### Rating
+| Campo | Tipo | Obrigatório | Exemplo |
+|-----------------|--------------------|-------------|-------------------------|
+| id | número | sim | 1 |
+| valor | número | sim | 3.5 |
+| avalicao | texto | não | "Muito ruim" |
+| id_filme | número (fk) | sim | 37 |
+| id_usuario | número (fk) | sim | 1 |
+| dataCriacao | data/hora | sim | 2025-08-20 14:30 |
+| dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
+
 ### 9.3 Relações entre entidades
-<!-- Frases simples bastam. EXEMPLO:
-Um Usuario tem muitos Chamados (1→N).
-Um Chamado pertence a um Usuario (N→1). -->
-- Um [A] tem muitos [B]. (1→N)
-- Um [B] pertence a um [A]. (N→1)
+- Um [filme] tem muitas [avaliações]. (1→N)
+- Uma [avaliação] pertence a um [filme]. (N→1)
+- Um [usuário] tem muitas [avaliações], (1→N)
+- Uma [avaliacao] pertence a um [usuario]. (N→1)
