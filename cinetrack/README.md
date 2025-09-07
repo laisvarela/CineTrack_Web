@@ -152,4 +152,16 @@ Critérios de aceite:
 - Um [user] tem muitos [ratings], (1→N)
 - Um [rating] pertence a um [user]. (N→1)
 
+### 9.4 Modelagem do banco de dados no Firestore
 ![Firebase](image.png)
+
+Future createAccount({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
