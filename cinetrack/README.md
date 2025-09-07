@@ -1,18 +1,18 @@
 # CineTrack
 
 ## 1) Problema
-Após assistir um filme, sempre fica um sentimento bom ou ruim. Pensamentos como "esse filme é a coisa mais xexelenta que já vi" ou "melhor coisa que já me aconteceu foi assistir esse filme", de qualquer forma, é preciso ter um local para expressar e compartilhar essa experiência.
-No início, o foco será usuários online com o objetivo de disponibilizar um espaço (site) para avaliação de filmes, incluindo nota e comentários. 
+Após assistir um movie, sempre fica um sentimento bom ou ruim. Pensamentos como "esse movie é a coisa mais xexelenta que já vi" ou "melhor coisa que já me aconteceu foi assistir esse movie", de qualquer forma, é preciso ter um local para expressar e compartilhar essa experiência.
+No início, o foco será users online com o objetivo de disponibilizar um espaço (site) para rating de movies, incluindo nota e comentários. 
 
 ## 2) Atores e Decisores (quem usa / quem decide)
-**Usuários principais**: Usuários online
+**users principais**: users online
 
 **Decisores/Apoiadores**: Adm
 
 ## 3) Casos de uso (de forma simples)
 **Todos**: Logar/deslogar, configuração conta, CRUD `rating`
 
-**Usuário**: CRUD `user` (inserir, editar, remover), CRUD `movies` (listar), CRUD `rating` (inserir, listar, editar, remover)
+**user**: CRUD `user` (inserir, editar, remover), CRUD `movies` (listar), CRUD `rating` (inserir, listar, editar, remover)
 
 **Adm**: CRUD de `movies` (inserir, listar, editar, remover), CRUD de `rating` (listar, remover)
 
@@ -45,9 +45,9 @@ criar e listar chamados responde em até 1 segundo na maioria das vezes (ex.: 9 
 cada 10).
 Validação: medir no protótipo com 30 ações; meta: pelo menos 27 de 30 ações (9/10)
 em 1s ou menos. -->
-**H-Valor**: Se usuário tem um espaço para opinar, se sente mais confortável em se expressar e melhora o humor.
+**H-Valor**: Se user tem um espaço para opinar, se sente mais confortável em se expressar e melhora o humor.
 
-**Validação** (`rating`): teste com 5 usuários; sucesso se ≥4 avaliam com comentários e nota; falha se ≥4 avaliam com apenas nota; alvo: rating com nota e comentário.
+**Validação** (`rating`): teste com 5 users; sucesso se ≥4 avaliam com comentários e nota; falha se ≥4 avaliam com apenas nota; alvo: rating com nota e comentário.
 
 **H-Viabilidade**: Com app no navegador (flutter), criar e responder requisições sem disparar erros.
 
@@ -66,16 +66,16 @@ Inclui login simples, criar chamado, listar em ordem.
 Critérios de aceite (objetivos): criar → aparece na lista com horário; encerrar →
 some ou marca "fechado". -->
 **Fluxo principal (curto):**
-1) Usuário faz login 
+1) user faz login 
 2) Acessa a Home Page
-3) Procura/seleciona filme
+3) Procura/seleciona movie
 4) Clica em "Avaliar"
 5) Escreve comentário (opcional) e seleciona nota
 6) Clica em "Enviar"
    
 **Primeira fatia vertical (escopo mínimo):**
 
-Inclui: login, valida dados no Firebase, retorna mensagem de erro ou entra no site, carrega lista de filmes.
+Inclui: login, valida dados no Firebase, retorna mensagem de erro ou entra no site, carrega lista de movies.
 
 Critérios de aceite:
 - Sucesso ao validar dados
@@ -106,51 +106,50 @@ Critérios de aceite:
 **Deploy do back-end:** -
 ## 9) Plano de Dados (Dia 0) — somente itens 1–3
 ### 9.1 Entidades
-<!-- EXEMPLO:
-- Usuario — pessoa que usa o sistema (aluno/professor)
-- Chamado — pedido de ajuda criado por um usuário -->
-- [User] — usuario pode ser user ou admin
-- [Movie] — filmes cadastrados
+- [User] — user pode ser user ou admin
+- [Movie] — movies cadastrados
 - [Rating] - avaliacoes relacionadas a movie e user
 
 ### 9.2 Campos por entidade
 <!-- Use tipos simples: uuid, texto, número, data/hora, booleano, char. -->
 ### User
-| Campo | Tipo | Obrigatório | Exemplo |
-|-----------------|-------------------------------|-------------|--------------------|
-| id | número | sim | 1 |
-| nome | texto | sim | "Ana Souza" |
-| email | texto | sim (único) | "ana@exemplo.com" |
-| senha_hash | texto | sim | "$2a$10$..." |
-| papel | texto (USER;ADMIN) | sim | 0 |
-| dataCriacao | data/hora | sim | 2025-08-20 14:30 |
-| dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
-### Movie
-| Campo | Tipo | Obrigatório | Exemplo |
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
 |-----------------|--------------------|-------------|-------------------------|
-| id | número | sim | 2 |
-| titulo | texto | sim | "Senhor dos Anéis" |
-| urlCapa | texto | sim | |
-| ano | número | sim | 1972 |
-| sinopse | texto | sim | "Amigos em uma jornada para queimar o anel" |
-| diretores | array | sim | [texto] |
-| generos | array | sim | [texto] |
-| dataCriacao | data/hora | sim | 2025-08-20 14:30 |
-| dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
+| id              | string             | sim         | RKFdhsiudhKdjaniL       |
+| name            | texto              | sim         | "Ana Souza"             |
+| email           | texto              | sim (único) | "ana@exemplo.com"       |
+| role            | texto (USER;ADMIN) | sim         | 0                       |
+| create_date     | data/hora          | sim         | 2025-08-20 14:30        |
+| update_date     | data/hora          | sim         | 2025-08-20 15:10        |
+
+### Movie
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
+|-----------------|--------------------|-------------|-------------------------|
+| id              | string             | sim         | DKFdhsiudhKdjaniL       |
+| title           | texto              | sim         | "Senhor dos Anéis"      |
+| url_image       | texto              | não         |                         |
+| year            | número             | sim         | 1972                    |
+| summary         | texto              | sim         | "texto"                 |
+| directors       | array              | sim         | [texto]                 |
+| genres          | array              | sim         | [texto]                 |
+| create_date     | data/hora          | sim         | 2025-08-20 14:30        |
+| update_date     | data/hora          | sim         | 2025-08-20 15:10        |
 
 ### Rating
-| Campo | Tipo | Obrigatório | Exemplo |
+| Campo           | Tipo               | Obrigatório | Exemplo                 |
 |-----------------|--------------------|-------------|-------------------------|
-| id | número | sim | 1 |
-| valor | número | sim | 3.5 |
-| avalicao | texto | não | "Muito ruim" |
-| id_filme | número (fk) | sim | 37 |
-| id_usuario | número (fk) | sim | 1 |
-| dataCriacao | data/hora | sim | 2025-08-20 14:30 |
-| dataAtualizacao | data/hora | sim | 2025-08-20 15:10 |
+| id              | string             | sim         | LKFdhsiudhKdjaniL       |
+| rating          | número             | sim         | 3.5                     |
+| comment         | texto              | não         | "Muito ruim"            |
+| movie_id        | string (fk)        | sim         | DKFdhsiudhKdjaniL       |
+| user_id         | string (fk)        | sim         | RKFdhsiudhKdjaniL       |
+| create_date     | data/hora          | sim         | 2025-08-20 14:30        |
+| update_date     | data/hora          | sim         | 2025-08-20 15:10        |
 
 ### 9.3 Relações entre entidades
-- Um [filme] tem muitas [avaliações]. (1→N)
-- Uma [avaliação] pertence a um [filme]. (N→1)
-- Um [usuário] tem muitas [avaliações], (1→N)
-- Uma [avaliacao] pertence a um [usuario]. (N→1)
+- Um [movie] tem muitos [ratings]. (1→N)
+- Um [rating] pertence a um [movie]. (N→1)
+- Um [user] tem muitos [ratings], (1→N)
+- Um [rating] pertence a um [user]. (N→1)
+
+![Firebase](image.png)
