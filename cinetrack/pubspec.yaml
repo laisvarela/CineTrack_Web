@@ -37,6 +37,7 @@ dependencies:
   firebase_core: ^4.1.0
   firebase_auth: ^6.0.2
   cloud_firestore: ^6.0.1
+  flutter_svg: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -77,12 +78,13 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
 fonts:
-    - family: LibertinusSerif
+    - family: Inter
       fonts:
-        - asset: assets/fonts/LibertinusSerif-Bold.ttf
-        - asset: assets/fonts/LibertinusSerif-BoldItalic.ttf
-        - asset: assets/fonts/LibertinusSerif-Italic.ttf
-        - asset: assets/fonts/LibertinusSerif-Regular.ttf
-        - asset: assets/fonts/LibertinusSerif-SemiBold.ttf
-        - asset: assets/fonts/LibertinusSerif-SemiBoldItalic.ttf
+        - asset: assets/fonts/Inter_Regular.ttf
+        - asset: assets/fonts/Inter_Medium.ttf
+        - asset: assets/fonts/Inter_SemiBold.ttf
+        - asset: assets/fonts/Inter_ExtraBold.ttf
+        - asset: assets/fonts/Inter_Bold.ttf
+        - asset: assets/fonts/Inter_Light.ttf
+        - asset: assets/fonts/Inter_ExtraLight.ttf
 
