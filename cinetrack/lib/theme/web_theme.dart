@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WebTheme {
-  ThemeData get darkTheme {
+  ThemeData get lightTheme {
     // ColorScheme é a paleta de cores principal
     final colorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF191530),
@@ -14,7 +14,7 @@ class WebTheme {
     // define o textTheme usando uma fonte do Google Fonts
     final textTheme =
         GoogleFonts.interTextTheme(
-          ThemeData.light().textTheme, // tema do texto padrão
+          ThemeData.light().textTheme,
         ).copyWith(
           //personaliza estilos especificos
           displayLarge: const TextStyle(
@@ -22,11 +22,18 @@ class WebTheme {
             fontSize: 32,
             color: Colors.white,
           ),
+          displayMedium: const TextStyle(
+            fontWeight: FontWeight.w100,
+            fontSize: 20, 
+            color: Colors.white
+          ),
           labelLarge: const TextStyle(
             // estilo para texto de botões
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            fontSize: 20,
+            color: Colors.white
           ),
+
         );
     return ThemeData(
       colorScheme: colorScheme,
@@ -42,6 +49,7 @@ class WebTheme {
           ),
           side: BorderSide(color: Color(0xFFf5b938), width: 1),
           textStyle: textTheme.labelLarge,
+          padding: const EdgeInsets.all(16)
         ),
       ),
 
@@ -58,8 +66,9 @@ class WebTheme {
 
       appBarTheme: AppBarTheme(
         color: colorScheme.secondary,
-        titleTextStyle: textTheme.displayLarge,
+        titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
       ),
+
     );
   }
 }
