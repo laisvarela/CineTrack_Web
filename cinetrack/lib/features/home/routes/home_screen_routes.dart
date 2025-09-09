@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 
 class HomeScreenRoutes {
   static final Map<String, Widget Function(BuildContext)> routes = {
-    '/': (context) => const HomeScreen(),
+    '/home': (context) => const HomeScreen(),
   };
 }
