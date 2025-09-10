@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: WebTheme().lightTheme,
+      theme: WebTheme().darkTheme,
       routes: WebRoutes.routes,
       initialRoute: AuthRoutes.login,
     );
