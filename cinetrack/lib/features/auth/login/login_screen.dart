@@ -33,14 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         body: Center(
           child: Container(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: const Color(0xFFcd90f5).withAlpha(40),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFFcd90f5), width: 0.5),
             ),
             child: Column(
-              spacing: 14,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -51,12 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 75,
                   ),
                 ),
+                SizedBox(height: 10),
                 Text(
                   'CineTrack',
                   style: Theme.of(
                     context,
                   ).textTheme.displayLarge?.copyWith(color: Colors.white),
                 ),
+                SizedBox(height: 10),
                 Text(
                   'Sua jornada cinematográfica começa aqui',
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
@@ -64,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 20,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -116,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 30),
                 SizedBox(
                   width: 400,
                   child: ElevatedButton(
@@ -125,6 +126,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, AuthRoutes.login);
                     },
                     child: const Text('Entrar'),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'Não tem uma conta? ',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    TextButton(
+                      // sem estilizar o TextButton, fica uma sombra quando passa o mouse em cima
+                      // sem o padding, fica um espaço indesejado
+                      style: ButtonStyle(
+                        foregroundColor: WidgetStateProperty.all(
+                          Color(0xFFf5b938),
+                        ),
+                        overlayColor: WidgetStateProperty.all(
+                          Colors.transparent,
+                        ),
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AuthRoutes.createAccount);
+                      },
+                      child: Text(
+                        'Criar Conta',
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    'Esqueceu a senha?',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ],

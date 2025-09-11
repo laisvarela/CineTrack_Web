@@ -50,7 +50,7 @@ class WebTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 5,
-          backgroundColor: Color(0xFFf5b938),
+          backgroundColor: Color.fromARGB(255, 233, 172, 41),
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
