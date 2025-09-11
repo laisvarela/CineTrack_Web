@@ -1,4 +1,5 @@
 import 'package:cinetrack/core/asset_images.dart';
+import 'package:cinetrack/features/auth/repositories/auth_repository.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, digite um email';
+                            } else if (!RegExp(
+                              r'^[\w\.-]+@[\w\.-]+\.\w+$',
+                            ).hasMatch(value)) {
+                              return "Por favor, digite um e-mail válido";
                             }
                             return null;
                           },
@@ -109,6 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, digite uma senha';
+                            } else if (value.length < 6) {
+                              return 'Por favor, digite uma senha válida com no mínimo 6 caracteres';
                             }
                             return null;
                           },
@@ -122,8 +129,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 400,
                   child: ElevatedButton(
                     style: Theme.of(context).elevatedButtonTheme.style,
-                    onPressed: () {
-                      Navigator.pushNamed(context, AuthRoutes.login);
+                    onPressed: () async {
+                      bool isValid = _formKey.currentState!.validate();
+                      if (!isValid) return;
+                      try {
+                        final authRepository = AuthRepository();
+                        await authRepository.login(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
+                        if (!context.mounted) return;
+                        Navigator.of(
+                          context,
+                        ).popUntil((route) => route.isFirst);
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      } on AuthException catch (e) {
+                        if (!context.mounted) return;
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Erro'),
+                              content: Text(e.getMessage()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
                     child: const Text('Entrar'),
                   ),

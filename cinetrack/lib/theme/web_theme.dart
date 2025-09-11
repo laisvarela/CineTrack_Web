@@ -80,6 +80,16 @@ class WebTheme {
         color: colorScheme.secondary,
         titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
       ),
+
+  dialogTheme: DialogThemeData(
+    backgroundColor: colorScheme.surface,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+      side: BorderSide(color: Color(0xFFf5b938), width: 1),
+    ),
+    titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
+    contentTextStyle: textTheme.bodyLarge?.copyWith(color: Colors.white70),
+  ),
     );
   }
 }

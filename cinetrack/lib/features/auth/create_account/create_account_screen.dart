@@ -162,7 +162,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       Navigator.of(context).popUntil((route) => route.isFirst);
                       Navigator.of(
                         context,
-                      ).pushReplacementNamed(HomeScreenRoutes.home);
+                      ).pushReplacementNamed('/home');
                     } on AuthException catch (e) {
                       if (!context.mounted) return;
                       showDialog(
