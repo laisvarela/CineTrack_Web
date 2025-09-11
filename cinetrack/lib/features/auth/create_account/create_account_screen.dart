@@ -2,7 +2,6 @@ import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/auth/repositories/auth_repository.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
 import 'package:cinetrack/features/home/routes/home_screen_routes.dart';
-import 'package:cinetrack/routes/web_routes.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -112,6 +111,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, digite um e-mail';
+                            } else if (!RegExp(
+                              r'^[\w\.-]+@[\w\.-]+\.\w+$',
+                            ).hasMatch(value)) {
+                              return "Por favor, digite um e-mail válido";
                             }
                             return null;
                           },
@@ -133,6 +136,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, digite uma senha';
+                            } else if (value.length < 6) {
+                              return 'Por favor, digite uma senha válida com no mínimo 6 caracteres';
                             }
                             return null;
                           },
@@ -155,9 +160,28 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       );
                       if (!context.mounted) return;
                       Navigator.of(context).popUntil((route) => route.isFirst);
-                      Navigator.of(context).pushReplacementNamed(HomeScreenRoutes.home);
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed(HomeScreenRoutes.home);
                     } on AuthException catch (e) {
                       if (!context.mounted) return;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Erro'),
+                            content: Text(e.getMessage()),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Ok'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   },
                   child: Text('Criar conta'),
