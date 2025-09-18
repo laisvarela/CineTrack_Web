@@ -1,7 +1,6 @@
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/auth/repositories/auth_repository.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
-import 'package:cinetrack/features/home/routes/home_screen_routes.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -74,7 +73,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10,
+                     // spacing: 10,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 5),
