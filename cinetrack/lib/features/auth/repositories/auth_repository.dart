@@ -21,7 +21,12 @@ class AuthRepository {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(currentUser.uid)
-          .set({"id": currentUser.uid, "email": email, "name": name});
+          .set({
+            "id": currentUser.uid,
+            "email": email,
+            "name": name,
+            "role": "client",
+          });
     } on FirebaseAuthException catch (e) {
       throw AuthException(code: e.code);
     }
@@ -34,6 +39,14 @@ class AuthRepository {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
+      throw AuthException(code: e.code);
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on AuthException catch (e) {
       throw AuthException(code: e.code);
     }
   }
@@ -64,6 +77,8 @@ class AuthException implements Exception {
         return "Insira um e-mail.";
       case "invalid-credential":
         return "E-mail ou senha inválido.";
+      case "operation-not-allowed":
+        return "Erro ao sair da conta.";
       default:
         return "Erro desconhecido $code";
     }
