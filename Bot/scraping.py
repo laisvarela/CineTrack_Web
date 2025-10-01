@@ -22,14 +22,11 @@ def crawler():
     # abre o driver na página 
     driver.get("https://www.adorocinema.com/filmes/numero-cinemas/")
     
-   #links = []
-    #links.append("https://www.adorocinema.com/filmes/numero-cinemas/")
     # faz o scraping do primeiro link
     scraper("https://www.adorocinema.com/filmes/numero-cinemas/")
     try:
         # até a página 10 do site
         for i in range(1, 10):
-            #scraper(links[i-1])
             # espera até que o elemento que contém o link para próxima página carregue completamente
             # senão causa erro pois o driver está tentando acessar um componente que não existe ainda
             WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "nav")))
@@ -53,7 +50,6 @@ def crawler():
             # se botão conter o atributo href, indica que é o botão de próxima página que procuro
             if botao_prox.get_attribute("href"):
                 link = botao_prox.get_attribute("href")
-                #links.append(link)
                 # faço o scraping no link, se a função me retornar true, o scraping foi um sucesso e o botão para próxima página pode ser clicado
                 if scraper(link):
                     url_antes = driver.current_url
@@ -117,7 +113,7 @@ def scraper(link):
                             
                             # já a sinopse não tem posição certa, mas é a linha com mais caracteres
                         if len(linhas) > 1:
-                                # Ignora o título (linhas[0]) e pega a maior das demais
+                            # Ignora o título (linhas[0]) e pega a maior das demais
                             sinopse = max(linhas[1:], key=len).replace(',', '')
                         else:
                             sinopse = "Sem sinopse."
@@ -145,10 +141,9 @@ def scraper(link):
                         "sinopse": sinopse,
                         "capa": url_capa
                 }
+                
                 if not any(f["titulo"].lower() == filme["titulo"].lower() for f in filmes):
                     filmes.append(filme)
-                
-       
                   
     except Exception as e:
         print(f"Falha ao encontrar elementos na página. Erro: {e}")
@@ -162,3 +157,6 @@ if __name__ == "__main__":
             json.dump(filmes, f, ensure_ascii=False, indent=2)
     except Exception as e:
         print(f"Falha ao salvar filmes no arquivo json.\nErro: {e}")
+    
+    print("Scraping completo!")
+    
