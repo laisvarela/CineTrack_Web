@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         actions: [
           Row(
             children: [
@@ -39,6 +40,77 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 250,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                colors: [
+                  Color.fromARGB(255, 72, 49, 118),
+                  Color.fromARGB(255, 18, 16, 58),
+                ],
+              ),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: Column(
+                  spacing: 20,
+                  children: [
+                    Text(
+                      'Descubra filmes incríveis',
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    Text(
+                      'Avalie e explore o mundo do cinema',
+                      style: Theme.of(context).textTheme.displayMedium,
+                    ),
+                    SizedBox(height: 1),
+                    Row(
+                      spacing: 8,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.star),
+                        Icon(Icons.star),
+                        Icon(Icons.star),
+                        Icon(Icons.star),
+                        Icon(Icons.star),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Theme.of(context).colorScheme.surface,
+                  Color.fromARGB(255, 83, 47, 130),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Theme.of(context).colorScheme.surface,
+                  Color.fromARGB(255, 83, 47, 130),
+                ],
+              ),
+            ),
           ),
         ],
       ),

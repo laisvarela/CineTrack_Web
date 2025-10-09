@@ -9,6 +9,7 @@ class WebTheme {
       brightness: Brightness.dark,
       primary: Colors.white,
       secondary: Color(0xFF361d57),
+      surface: Color.fromARGB(255, 18, 16, 58),
     );
 
     // define o textTheme usando uma fonte do Google Fonts
@@ -17,7 +18,7 @@ class WebTheme {
           //personaliza estilos especificos
           displayLarge: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 32,
+            fontSize: 50,
             color: Colors.white,
           ),
           displayMedium: const TextStyle(
@@ -46,7 +47,8 @@ class WebTheme {
       colorScheme: colorScheme,
       textTheme: textTheme,
       scaffoldBackgroundColor: colorScheme.primary,
-
+      useMaterial3: true,
+      fontFamily: GoogleFonts.inter().fontFamily,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 5,
@@ -81,15 +83,20 @@ class WebTheme {
         titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
       ),
 
-  dialogTheme: DialogThemeData(
-    backgroundColor: colorScheme.surface,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
-      side: BorderSide(color: Color(0xFFf5b938), width: 1),
-    ),
-    titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
-    contentTextStyle: textTheme.bodyLarge?.copyWith(color: Colors.white70),
-  ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: Color(0xFFf5b938), width: 1),
+        ),
+        titleTextStyle: textTheme.displayLarge?.copyWith(color: Colors.white),
+        contentTextStyle: textTheme.bodyLarge?.copyWith(color: Colors.white70),
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.amber,
+        size: 20,  
+      )
+
     );
   }
 }
