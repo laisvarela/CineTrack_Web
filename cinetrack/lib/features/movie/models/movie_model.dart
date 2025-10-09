@@ -4,7 +4,7 @@ class MovieModel {
   final String sinopse;
   final List<String> generos;
   final List<String> direcao;
-  final String? capa;
+  final String capa;
 
   MovieModel({
     required this.titulo,

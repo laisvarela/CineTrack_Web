@@ -1,5 +1,7 @@
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
+import 'package:cinetrack/features/movie/models/movie_model.dart';
+import 'package:cinetrack/features/movie/repositories/movie_repository.dart';
 import 'package:cinetrack/features/user/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String userRole = UserRepository().userRole;
+  // late indica que a variável vai ser inicializada depois, nesse caso, será inicializada no initState()
+  late Future<List<MovieModel>> futureFilmes;
+  // Future é indicado para funções assíncronas, usado para operações que levam tempo, como buscar dados do banco
+  // Future<List<MovieModel>> indica que futureFilmes será um valor de lista de filmes, mas só estará disponível depois que a operação terminar
+  @override
+  void initState() {
+    super.initState();
+    futureFilmes = MovieRepository().getMovieList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -72,7 +85,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Text(
                                 'Avalie e explore o mundo do cinema',
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(color: const Color.fromARGB(255, 214, 214, 214)),
+                                style: Theme.of(context).textTheme.displayMedium
+                                    ?.copyWith(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        214,
+                                        214,
+                                        214,
+                                      ),
+                                    ),
                               ),
                               SizedBox(height: 8),
                               Row(
@@ -102,10 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               Color.fromARGB(255, 38, 36, 71),
                             ],
                           ),
-                        ),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          
                         ),
                       ),
                     ),
