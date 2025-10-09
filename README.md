@@ -17,6 +17,4 @@ Este site permite que usuários explorem, avaliem e gerenciem filmes, com funcio
 - ⭐ Sistema de Avaliação: Usuários podem avaliar filmes e visualizar médias
 
 # 🔐 Segurança
-O projeto aplica boas práticas de segurança para proteger dados e sessões:
-- Tokens `CSRF` para prevenir ataques de falsificação de requisições
-- Cookies configurados com `HttpOnly` e `SameSite` para evitar acesso indevido e vazamento de sessão
+O Firebase oferece um conjunto de funcionalidade para segurança de autenticação, recuperação de conta, entre outros. 
