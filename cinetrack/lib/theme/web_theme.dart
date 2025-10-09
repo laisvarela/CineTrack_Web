@@ -93,10 +93,9 @@ class WebTheme {
         contentTextStyle: textTheme.bodyLarge?.copyWith(color: Colors.white70),
       ),
       iconTheme: IconThemeData(
-        color: Colors.amber,
-        size: 20,  
-      )
-
+        color: const Color.fromARGB(255, 235, 184, 28),
+        size: 20,
+      ),
     );
   }
 }

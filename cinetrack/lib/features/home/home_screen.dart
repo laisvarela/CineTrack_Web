@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       'Avalie e explore o mundo do cinema',
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style: Theme.of(context).textTheme.displayMedium?.copyWith(color: const Color.fromARGB(255, 214, 214, 214)),
                     ),
                     SizedBox(height: 1),
                     Row(
