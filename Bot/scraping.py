@@ -97,11 +97,18 @@ def scraper(link):
                             
                             # o ano e genêro ficam na mesma linha [1], mas separados por um |
                         partes = [p.strip() for p in linhas[1].split("|")]
-                        if len(partes) >= 3:
-                                # eu desejo pegar apenas o ano do filme, antão aplico um regex
+                        if len(partes) >= 2:
+                            # eu desejo pegar apenas o ano do filme, antão aplico um regex
+                            # ano sempre fica na parte[0]  
                             match = re.search(r"\b\d{4}\b", partes[0])
                             ano = match.group(0) if match else None
-                            generos = ', '.join([g.strip() for g in partes[2].split(",")])
+                            # partes pode ser ano | duração | generos == 3 partes
+                            # se esse for o caso, generos está na parte[2], caso contrário
+                            # estará na parte[1]
+                            if len(partes) == 3:
+                                generos = ', '.join([g.strip() for g in partes[2].split(",")])
+                            else:
+                                generos = ', '.join([g.strip() for g in partes[1].split(",")])
                         else:
                             ano = 0
                             generos = []
@@ -123,12 +130,24 @@ def scraper(link):
                     
                     # tentar pegar a imagem de capa
                 try:
-                    img_tag = div_principal.find_element(By.TAG_NAME, "img")
-                    url = img_tag.get_attribute("src")
-                    if '.jpg' in url:
-                        url_capa = url
-                    else:
-                        url_capa = ""
+                    div_secundaria = div_principal.find_element(By.TAG_NAME, "a")
+                    try:
+                        titulo_tag = div_secundaria.get_attribute("title")
+                        class_tag = div_secundaria.get_attribute("class")
+                        href_tag = div_secundaria.get_attribute("href")
+                    except:
+                        continue
+                    
+                    if titulo_tag and class_tag and href_tag and "xXx thumbnail-container thumbnail-link" in class_tag:
+                            img_tag = div_secundaria.find_element(By.TAG_NAME, "img")
+                            driver.execute_script("arguments[0].scrollIntoView();", img_tag)
+                            time.sleep(1) 
+                            url = img_tag.get_attribute("src")
+                            if '.jpg' or '.png' in url.lower():
+                                url_capa = url
+                            else:
+                                url_capa = ""
+                   
                 except Exception as e:
                     print(f"Falha na captura de imagem.\nErro: {e}")
                     url_capa = ""

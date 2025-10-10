@@ -124,6 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
+                        child: Row(
+                          children: [
+                            Image.network('data:image/gif;base64,R0lGODlhAwAEAIAAAAAAAAAAACH5BAEAAAAALAAAAAADAAQAAAIDhI9WADs=')
+                          ],
+                        ),
                       ),
                     ),
                     Container(
