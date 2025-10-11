@@ -1,11 +1,11 @@
 # CineTrack
 
 ## 1) Problema
-Após assistir um movie, sempre fica um sentimento bom ou ruim. Pensamentos como "esse movie é a coisa mais xexelenta que já vi" ou "melhor coisa que já me aconteceu foi assistir esse movie", de qualquer forma, é preciso ter um local para expressar e compartilhar essa experiência.
-No início, o foco será users online com o objetivo de disponibilizar um espaço (site) para rating de movies, incluindo nota e comentários. 
+Após assistir um movie, sempre fica um sentimento bom ou ruim. Pensamentos como "esse filme é a coisa mais xexelenta que já vi" ou "melhor coisa que já me aconteceu foi assistir esse filme", de qualquer forma, é preciso ter um local para expressar e compartilhar essa experiência.
+No início, o foco será usuários online com o objetivo de disponibilizar um espaço (site) para avaliação de filmes, incluindo nota e comentários. 
 
 ## 2) Atores e Decisores (quem usa / quem decide)
-**users principais**: users online
+**users principais**: usuários online
 
 **Decisores/Apoiadores**: Adm
 
@@ -17,17 +17,6 @@ No início, o foco será users online com o objetivo de disponibilizar um espaç
 **Adm**: CRUD de `movies` (inserir, listar, editar, remover), CRUD de `rating` (listar, remover)
 
 ## 4) Limites e suposições
-<!-- Simples assim:
-- Limites = regras/prazos/obrigações que você não controla.
-- Suposições = coisas que você espera ter e podem falhar.
-- Plano B = como você segue com a 1ª fatia se algo falhar.
-EXEMPLO:
-Limites: entrega final até o fim da disciplina (ex.: 2025-11-30); rodar no
-navegador; sem serviços pagos.
-Suposições: internet no laboratório; navegador atualizado; acesso ao GitHub; 10
-min para teste rápido.
-Plano B: sem internet → rodar local e salvar em arquivo/LocalStorage; sem tempo do
-professor → testar com 3 colegas. -->
 **Limites**: entrega ginal até o fim da disciplina (12/25), rodar no navegador, sem serviços pagos.
 
 **Suposições**: internet no laboratório; navegador atualizado; acesso ao GitHub; 10
@@ -36,15 +25,6 @@ min para teste rápido.
 **Plano B**: customizar o código com o que está funcionando
 
 ## 5) Hipóteses + validação
-<!-- Preencha as duas frases abaixo. Simples e direto.
-EXEMPLO Valor: Se o aluno ver sua posição na fila, sente mais controle e conclui
-melhor a atividade.
-Validação: teste com 5 alunos; sucesso se ≥4 abrem/fecham chamado sem ajuda.
-EXEMPLO Viabilidade: Com app no navegador (HTML/CSS/JS + armazenamento local),
-criar e listar chamados responde em até 1 segundo na maioria das vezes (ex.: 9 de
-cada 10).
-Validação: medir no protótipo com 30 ações; meta: pelo menos 27 de 30 ações (9/10)
-em 1s ou menos. -->
 **H-Valor**: Se user tem um espaço para opinar, se sente mais confortável em se expressar e melhora o humor.
 
 **Validação** (`rating`): teste com 5 users; sucesso se ≥4 avaliam com comentários e nota; falha se ≥4 avaliam com apenas nota; alvo: rating com nota e comentário.
@@ -129,7 +109,7 @@ Critérios de aceite:
 | title           | texto              | sim         | "Senhor dos Anéis"      |
 | url_image       | texto              | não         |                         |
 | year            | número             | sim         | 1972                    |
-| summary         | texto              | sim         | "texto"                 |
+| sinopse         | texto              | sim         | "texto"                 |
 | directors       | array              | sim         | [texto]                 |
 | genres          | array              | sim         | [texto]                 |
 | create_date     | data/hora          | sim         | 2025-08-20 14:30        |
