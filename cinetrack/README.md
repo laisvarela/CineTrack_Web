@@ -17,7 +17,7 @@ No início, o foco será usuários online com o objetivo de disponibilizar um es
 **Adm**: CRUD de `movies` (inserir, listar, editar, remover), CRUD de `rating` (listar, remover)
 
 ## 4) Limites e suposições
-**Limites**: entrega ginal até o fim da disciplina (12/25), rodar no navegador, sem serviços pagos.
+**Limites**: entrega final até o fim da disciplina (12/25), rodar no navegador, sem serviços pagos.
 
 **Suposições**: internet no laboratório; navegador atualizado; acesso ao GitHub; 10
 min para teste rápido.
