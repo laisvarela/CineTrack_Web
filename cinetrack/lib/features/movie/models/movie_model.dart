@@ -2,8 +2,8 @@ class MovieModel {
   final String titulo;
   final String ano;
   final String sinopse;
-  final List<String> generos;
-  final List<String> direcao;
+  final String generos;
+  final String direcao;
   final String capa;
 
   MovieModel({

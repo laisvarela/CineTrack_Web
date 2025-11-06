@@ -2,6 +2,12 @@ import 'package:cinetrack/features/movie/models/movie_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer';
 
+// controller atualiza o estado de acordo com a resposta dos métodos implementados no repository
+
+// repository faz as chamadas para API e esses negócios ai 
+
+// service controla as regras de negócio e chama o repository e retorna para o controller
+
 class MovieRepository {
   // recebe os dados do Firebase e transforma em uma lista de objeto
   Future<List<MovieModel>> getMovieList() async {
