@@ -96,6 +96,15 @@ class WebTheme {
         color: const Color.fromARGB(255, 235, 184, 28),
         size: 20,
       ),
+
+      cardTheme: CardThemeData(
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          //side: BorderSide(color: Color(0xFFf5b938), width: 1)
+        ),
+        elevation: 4
+      )
     );
   }
 }

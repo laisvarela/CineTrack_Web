@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
-import 'package:cinetrack/features/user/repositories/user_repository.dart';
+import 'package:cinetrack/features/user/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +15,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final CarouselSliderController _carouselController = CarouselSliderController(); // <-- adicionado
-  String userRole = UserRepository().userRole;
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
 
   @override
   void initState() {
@@ -25,209 +25,277 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final movieState = ref.watch(movieControllerProvider);
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        actions: [
-          Row(
-            children: [
-              ClipOval(
-                child: Image.asset(AssetImages.mainIcon, width: 35, height: 35),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  if (!context.mounted) return;
-                  Navigator.of(context).popUntil((_) => false);
-                  Navigator.pushNamed(context, AuthRoutes.login);
-                },
-                child: Text(
-                  'Sair',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            ],
+    final user = ref.watch(userControllerProvider);
+    return Expanded(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipOval(child: Image.asset(AssetImages.mainIcon)),
           ),
-        ],
-      ),
+          title: user.when(
+            data: (user) => Text("Olá, ${user?.name ?? ''}"),
+            loading: () => CircularProgressIndicator(),
+            error: (error, stackTrace) => Text('Olá'),
+          ),
+          titleTextStyle: Theme.of(context).textTheme.bodyLarge,
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                if (!context.mounted) return;
+                Navigator.of(context).popUntil((_) => false);
+                Navigator.pushNamed(context, AuthRoutes.login);
+              },
+              child: Text(
+                'Sair',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          ],
+        ),
 
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final topHeight = 250.0;
-          final footerHeight = 100.0;
-          final minChildSize =
-              ((constraints.maxHeight - topHeight - footerHeight).clamp(
-                0.15,
-                0.85,
-              ));
-
-          return Stack(
-            children: [
-              Column(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            const double cardWidth = 260.0;
+            final double availableWidth = constraints.maxWidth;
+            final double viewportFraction = (cardWidth / availableWidth).clamp(
+              0.08,
+              1.0,
+            );
+            return Expanded(
+              child: Stack(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 250,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        colors: [
-                          Color.fromARGB(255, 72, 49, 118),
-                          Color.fromARGB(255, 18, 16, 58),
-                        ],
-                      ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 60),
-                        child: Column(
-                          children: [
-                            Text(
-                              'Descubra filmes incríveis',
-                              style: Theme.of(context).textTheme.displayLarge,
-                            ),
-                            Text(
-                              'Avalie e explore o mundo do cinema',
-                              style: Theme.of(context).textTheme.displayMedium
-                                  ?.copyWith(
-                                    color: const Color.fromARGB(
-                                      255,
-                                      214,
-                                      214,
-                                      214,
-                                    ),
-                                  ),
-                            ),
-                            SizedBox(height: 8),
-                            Row(
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 240,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            colors: [
+                              Color.fromARGB(255, 72, 49, 118),
+                              Color.fromARGB(255, 18, 16, 58),
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 60),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
+
                               children: [
-                                Icon(Icons.star),
-                                Icon(Icons.star),
-                                Icon(Icons.star),
-                                Icon(Icons.star),
-                                Icon(Icons.star),
+                                Text(
+                                  'Descubra filmes incríveis',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displayLarge,
+                                ),
+                                Text(
+                                  'Avalie e explore o mundo do cinema',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium
+                                      ?.copyWith(
+                                        color: const Color.fromARGB(
+                                          255,
+                                          214,
+                                          214,
+                                          214,
+                                        ),
+                                      ),
+                                ),
+                                SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.star),
+                                    Icon(Icons.star),
+                                    Icon(Icons.star),
+                                    Icon(Icons.star),
+                                    Icon(Icons.star),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      height: footerHeight,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color.fromARGB(255, 18, 16, 58),
-                            Color.fromARGB(255, 38, 36, 71),
-                          ],
-                        ),
-                      ),
-                      child: Stack( // <-- envolve o carousel e os botões
-                        alignment: Alignment.center,
-                        children: [
-                          CarouselSlider.builder(
-                           itemCount: ref
-                               .watch(movieControllerProvider)
-                               .maybeWhen(
-                                 data: (movies) => movies.length,
-                                 orElse: () => 0,
-                               ),
-                           carouselController: _carouselController,
-                           itemBuilder: (context, index, realIndex) {
-                             final movieState = ref.watch(movieControllerProvider);
-                             return movieState.when(
-                             error: (error, stackTrace) {
-                               return Center(
-                                 child: Text('Erro ao carregar filmes'),
-                               );
-                             },
-                             loading: () =>
-                                 Center(child: CircularProgressIndicator()),
-                             data: (movies) {
-                               if (movies.isEmpty) {
-                                 return Center(
-                                   child: Text('Nenhum filme encontrado'),
-                                 );
-                               }
-                               final movie = movies[index];
-                               return Center(
-                                 child: SizedBox(
-                                   height: 500,
-                                   width: 200,
-                                   child: Card(
-                                     shape: RoundedRectangleBorder(
-                                       borderRadius: BorderRadius.circular(12),
-                                     ),
-                                     elevation: 4,
-                                     child: Column(
-                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                       children: [
-                                         Padding(
-                                           padding: const EdgeInsets.all(8.0),
-                                           child: SizedBox(
-                                             height: 200,
-                                             width: double.infinity,
-                                             child: Image.network(movie.capa, fit: BoxFit.cover),
-                                           ),
-                                         ),
-                                         Padding(
-                                           padding: const EdgeInsets.all(12),
-                                           child: Column(
-                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                             children: [Text(movie.titulo)],
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   ),
-                                 ),
-                               );
-                             },
-                           );
-                         },
-                         options: CarouselOptions(
-                           viewportFraction: 0.20,
-                           scrollPhysics: const NeverScrollableScrollPhysics(),
-                         ),
-                          ), // fim CarouselSlider
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          height: double.maxFinite,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromARGB(255, 18, 16, 58),
+                                Color.fromARGB(255, 38, 36, 71),
+                              ],
+                            ),
+                          ),
+                          child: Row(
+                            spacing: 10,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () =>
+                                      _carouselController.previousPage(
+                                        duration: const Duration(
+                                          milliseconds: 300,
+                                        ),
+                                        curve: Curves.ease,
+                                      ),
+                                ),
+                              ),
+                              Expanded(
+                                child: CarouselSlider.builder(
+                                  itemCount: ref
+                                      .watch(movieControllerProvider)
+                                      .maybeWhen(
+                                        data: (movies) => movies.length,
+                                        orElse: () => 0,
+                                      ),
+                                  carouselController: _carouselController,
+                                  itemBuilder: (context, index, realIndex) {
+                                    final movieState = ref.watch(
+                                      movieControllerProvider,
+                                    );
+                                    return movieState.when(
+                                      error: (error, stackTrace) {
+                                        return Center(
+                                          child: Text(
+                                            'Erro ao carregar filmes',
+                                          ),
+                                        );
+                                      },
+                                      loading: () => Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      data: (movies) {
+                                        if (movies.isEmpty) {
+                                          return Center(
+                                            child: Text(
+                                              'Nenhum filme encontrado',
+                                            ),
+                                          );
+                                        }
+                                        final movie = movies[index];
+                                        return Center(
+                                          child: SizedBox(
+                                            height: 380,
+                                            width: 260,
+                                            child: Card(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          8.0,
+                                                        ),
+                                                    child: SizedBox(
+                                                      height: 180,
+                                                      width: double.maxFinite,
+                                                      child: Image.network(
+                                                        movie.capa,
+                                                        fit: BoxFit.contain,
+                                                        alignment:
+                                                            Alignment.topCenter,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          12,
+                                                        ),
+                                                    child: Column(
+                                                      spacing: 8,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          movie.generos,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        Text(
+                                                          movie.titulo,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        Text(
+                                                          movie.ano,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  options: CarouselOptions(
+                                    height: 380,
+                                    viewportFraction: viewportFraction,
+                                    enlargeCenterPage: false,
+                                    enableInfiniteScroll: true,
+                                    scrollPhysics:
+                                        const NeverScrollableScrollPhysics(),
+                                  ),
+                                ),
+                              ),
 
-                          // botões únicos à esquerda/direita
-                          Positioned(
-                            left: 4,
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                              onPressed: () => _carouselController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.ease),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => _carouselController.nextPage(
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Positioned(
-                            right: 4,
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                              onPressed: () => _carouselController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: Color.fromARGB(255, 18, 16, 58),
+                      Container(
+                        width: double.infinity,
+                        height: 100,
+                        color: Color.fromARGB(255, 18, 16, 58),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
