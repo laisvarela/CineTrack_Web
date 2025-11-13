@@ -15,6 +15,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final CarouselSliderController _carouselController = CarouselSliderController(); // <-- adicionado
   String userRole = UserRepository().userRole;
 
   @override
@@ -129,37 +130,91 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ],
                         ),
                       ),
-                      child: CarouselSlider.builder(
-                        itemCount: ref
-                            .watch(movieControllerProvider)
-                            .maybeWhen(
-                              data: (movies) => movies.length,
-                              orElse: () => 0,
+                      child: Stack( // <-- envolve o carousel e os botões
+                        alignment: Alignment.center,
+                        children: [
+                          CarouselSlider.builder(
+                           itemCount: ref
+                               .watch(movieControllerProvider)
+                               .maybeWhen(
+                                 data: (movies) => movies.length,
+                                 orElse: () => 0,
+                               ),
+                           carouselController: _carouselController,
+                           itemBuilder: (context, index, realIndex) {
+                             final movieState = ref.watch(movieControllerProvider);
+                             return movieState.when(
+                             error: (error, stackTrace) {
+                               return Center(
+                                 child: Text('Erro ao carregar filmes'),
+                               );
+                             },
+                             loading: () =>
+                                 Center(child: CircularProgressIndicator()),
+                             data: (movies) {
+                               if (movies.isEmpty) {
+                                 return Center(
+                                   child: Text('Nenhum filme encontrado'),
+                                 );
+                               }
+                               final movie = movies[index];
+                               return Center(
+                                 child: SizedBox(
+                                   height: 500,
+                                   width: 200,
+                                   child: Card(
+                                     shape: RoundedRectangleBorder(
+                                       borderRadius: BorderRadius.circular(12),
+                                     ),
+                                     elevation: 4,
+                                     child: Column(
+                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.all(8.0),
+                                           child: SizedBox(
+                                             height: 200,
+                                             width: double.infinity,
+                                             child: Image.network(movie.capa, fit: BoxFit.cover),
+                                           ),
+                                         ),
+                                         Padding(
+                                           padding: const EdgeInsets.all(12),
+                                           child: Column(
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                             children: [Text(movie.titulo)],
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                               );
+                             },
+                           );
+                         },
+                         options: CarouselOptions(
+                           viewportFraction: 0.20,
+                           scrollPhysics: const NeverScrollableScrollPhysics(),
+                         ),
+                          ), // fim CarouselSlider
+
+                          // botões únicos à esquerda/direita
+                          Positioned(
+                            left: 4,
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                              onPressed: () => _carouselController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.ease),
                             ),
-                        itemBuilder: (context, index, realIndex) {
-                          final movieState = ref.watch(movieControllerProvider);
-                          return movieState.when(
-                            error: (error, stackTrace) {
-                              return Center(
-                                child: Text('Erro ao carregar filmes'),
-                              );
-                            },
-                            loading: () =>
-                                Center(child: CircularProgressIndicator()),
-                            data: (movies) {
-                              if (movies.isEmpty) {
-                                return Center(
-                                  child: Text('Nenhum filme encontrado'),
-                                );
-                              }
-                              final movie = movies[index];
-                              return Center(child: SizedBox(height: 300, width: 250, child: Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),));
-                            },
-                          );
-                        },
-                        options: CarouselOptions(autoPlay: true, ),
+                          ),
+                          Positioned(
+                            right: 4,
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                              onPressed: () => _carouselController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
