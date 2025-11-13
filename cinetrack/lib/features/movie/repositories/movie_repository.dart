@@ -4,7 +4,7 @@ import 'dart:developer';
 
 // controller atualiza o estado de acordo com a resposta dos métodos implementados no repository
 
-// repository faz as chamadas para API e esses negócios ai 
+// repository faz as chamadas para API e esses negócios ai
 
 // service controla as regras de negócio e chama o repository e retorna para o controller
 
@@ -19,7 +19,7 @@ class MovieRepository {
         return [];
       }
       return snapshot.docs
-          .map((doc) => MovieModel.fromJson(doc.data()))
+          .map((doc) => MovieModel.fromJson(doc.data(), id: doc.id))
           .toList();
       // o doc.data() retorna um Map<String, dynamic>
       // o método fromJson do MovieModel recebe esse map transforma em um objeto

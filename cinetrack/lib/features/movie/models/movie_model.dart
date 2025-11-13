@@ -5,6 +5,7 @@ class MovieModel {
   final String generos;
   final String direcao;
   final String capa;
+  final String id;
 
   MovieModel({
     required this.titulo,
@@ -13,10 +14,12 @@ class MovieModel {
     required this.generos,
     required this.direcao,
     required this.capa,
+    required this.id,
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> json) {
+  factory MovieModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return MovieModel(
+      id: id??'',
       titulo: json['titulo'],
       ano: json['ano'],
       sinopse: json['sinopse'],
