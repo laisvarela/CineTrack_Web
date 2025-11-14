@@ -130,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 400,
                     child: ElevatedButton(
                       style: Theme.of(context).elevatedButtonTheme.style,
+
                       onPressed: () async {
                         bool isValid = _formKey.currentState!.validate();
                         if (!isValid) return;
@@ -200,17 +201,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  TextButton(
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'Esqueceu a senha?',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
+                  // TextButton(
+                  //   style: ButtonStyle(
+                  //     padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  //     overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  //   ),
+                  //   onPressed: () {},
+                  //   child: Text(
+                  //     'Esqueceu a senha?',
+                  //     style: Theme.of(context).textTheme.bodySmall,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

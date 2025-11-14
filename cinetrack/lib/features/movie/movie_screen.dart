@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +16,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
     final movies = ref.watch(movieControllerProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Filme')
+      
       ),
     );
   }

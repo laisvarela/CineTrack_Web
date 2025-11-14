@@ -105,8 +105,7 @@ class WebTheme {
         ),
         elevation: 4,
       
-      
-      )
+      ),
     );
   }
 }
