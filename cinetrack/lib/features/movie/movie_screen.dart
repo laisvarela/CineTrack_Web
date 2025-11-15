@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
 import 'package:cinetrack/features/movie/models/movie_model.dart';
@@ -89,7 +87,6 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                             width: maxWidth,
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.04),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Colors.white12),
                               boxShadow: [
@@ -146,11 +143,15 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                                 children: [
                                                   Text(
                                                     'Título: ${movieSelected.titulo}',
-                                                    style: Theme.of(
-                                                      context,
-                                                    ).textTheme.titleMedium,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleLarge
+                                                        ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 20),
                                                   Text(
                                                     'Gênero: ${movieSelected.generos}',
                                                   ),
@@ -162,7 +163,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                                   Text(
                                                     'Ano: ${movieSelected.ano}',
                                                   ),
-                                                  const SizedBox(height: 12),
+                                                  const SizedBox(height: 20),
                                                   Text(
                                                     'Sinopse:',
                                                     style: Theme.of(
@@ -191,7 +192,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                       ).textTheme.titleLarge,
                                     ),
                                     const SizedBox(height: 12),
-                                    // aqui você pode mapear a lista de avaliações reais
+
                                     const Text(
                                       'Nenhuma avaliação por enquanto.',
                                       style: TextStyle(color: Colors.white70),
