@@ -6,7 +6,6 @@ import 'dart:developer';
 
 // repository faz as chamadas para API e esses negócios ai
 
-// service controla as regras de negócio e chama o repository e retorna para o controller
 
 class MovieRepository {
   // recebe os dados do Firebase e transforma em uma lista de objeto
