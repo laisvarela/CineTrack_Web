@@ -29,7 +29,6 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
       ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          // garante que o conteúdo ocupe no mínimo a altura visível (ajustando AppBar/status bar)
           constraints: BoxConstraints(
             minHeight:
                 MediaQuery.of(context).size.height -

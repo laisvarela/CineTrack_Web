@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/auth/routes/auth_routes.dart';
@@ -67,7 +65,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return SingleChildScrollView(
             child: Stack(
               children: [
-                // background fill garante que não apareça linha branca abaixo do footer
                 Container(
                   width: double.infinity,
                   height: constraints.maxHeight,
