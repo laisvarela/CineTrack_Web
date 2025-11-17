@@ -75,7 +75,7 @@ class RatingRepository {
     }
   }
 
-  Future<void> deleteDiary({required String ratingId}) async {
+  Future<void> deleteRating({required String ratingId}) async {
     try {
       return firestore.collection('ratings').doc(ratingId).delete();
     } catch (error, stackTrace) {
