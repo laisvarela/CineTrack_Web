@@ -45,12 +45,14 @@ class RatingRepository {
       if (snapshot.size <= 0) {
         return [];
       }
+      log('Success fetching user ratings');
       return snapshot.docs.map((doc) {
         final data = doc.data();
         final id = doc.id;
         data['id'] = id;
         return RatingModel.fromJson(data);
       }).toList();
+      
     } catch (e) {
       log('Error fetching user ratings', error: e);
       rethrow;
@@ -63,12 +65,14 @@ class RatingRepository {
       if (snapshot.size <= 0) {
         return [];
       }
+      log('Success fetching users ratings: ${snapshot.size}');
       return snapshot.docs.map((doc) {
         final data = doc.data();
         final id = doc.id;
         data['id'] = id;
         return RatingModel.fromJson(data);
       }).toList();
+      
     } catch (e) {
       log('Error fetching users ratings: ', error: e);
       rethrow;

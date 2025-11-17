@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
+  User? getCurrentUser(){
+    return FirebaseAuth.instance.currentUser;
+  }
   Future createAccount({
     required String email,
     required String password,

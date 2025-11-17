@@ -1,6 +1,7 @@
 import 'package:cinetrack/core/asset_images.dart';
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
 import 'package:cinetrack/features/movie/models/movie_model.dart';
+import 'package:cinetrack/features/movie/widgets/ratings_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -192,10 +193,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                     ),
                                     const SizedBox(height: 12),
 
-                                    const Text(
-                                      'Nenhuma avaliação por enquanto.',
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
+                                    RatingsWidget(movieId: movieSelected.id),
                                   ],
                                 );
                               },
