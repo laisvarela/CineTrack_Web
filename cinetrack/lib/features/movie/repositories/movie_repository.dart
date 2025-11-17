@@ -24,7 +24,7 @@ class MovieRepository {
       // o método fromJson do MovieModel recebe esse map transforma em um objeto
       // .toList() cria a lista
     } catch (e) {
-      log("Erro em carregar filmes", error: e);
+      log("Loading movies error: ", error: e);
       rethrow;
     }
   }
