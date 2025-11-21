@@ -1,31 +1,31 @@
 class MovieModel {
-  final String titulo;
-  final String ano;
+  final String title;
+  final String year;
   final String sinopse;
-  final String generos;
-  final String direcao;
-  final String capa;
+  final String genres;
+  final String directors;
+  final String cover;
   final String id;
 
   MovieModel({
-    required this.titulo,
-    required this.ano,
+    required this.title,
+    required this.year,
     required this.sinopse,
-    required this.generos,
-    required this.direcao,
-    required this.capa,
+    required this.genres,
+    required this.directors,
+    required this.cover,
     required this.id,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return MovieModel(
-      id: id??'',
-      titulo: json['titulo'],
-      ano: json['ano'],
+      id: id ?? '',
+      title: json['titulo'],
+      year: json['ano'],
       sinopse: json['sinopse'],
-      generos: json['genero'],
-      direcao: json['direcao'],
-      capa: json['capa'],
+      genres: json['genero'],
+      directors: json['direcao'],
+      cover: json['capa'],
     );
   }
 }

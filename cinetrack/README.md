@@ -112,6 +112,8 @@ Critérios de aceite:
 | sinopse         | texto              | sim         | "texto"                 |
 | directors       | array              | sim         | [texto]                 |
 | genres          | array              | sim         | [texto]                 |
+| ratingAverage   | número             | sim         | 7,8                 |
+| ratingCount     | número             | sim         | 42                 |
 | create_date     | data/hora          | sim         | 2025-08-20 14:30        |
 | update_date     | data/hora          | sim         | 2025-08-20 15:10        |
 

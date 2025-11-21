@@ -125,7 +125,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                         Card(
                                           clipBehavior: Clip.hardEdge,
                                           child: Image.network(
-                                            movieSelected.capa,
+                                            movieSelected.cover,
                                             fit: BoxFit.contain,
                                           ),
                                         ),
@@ -142,7 +142,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Título: ${movieSelected.titulo}',
+                                                    'Título: ${movieSelected.title}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .titleLarge
@@ -153,15 +153,15 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                                   ),
                                                   const SizedBox(height: 20),
                                                   Text(
-                                                    'Gênero: ${movieSelected.generos}',
+                                                    'Gênero: ${movieSelected.genres}',
                                                   ),
                                                   const SizedBox(height: 6),
                                                   Text(
-                                                    'Direção: ${movieSelected.direcao}',
+                                                    'Direção: ${movieSelected.directors}',
                                                   ),
                                                   const SizedBox(height: 6),
                                                   Text(
-                                                    'Ano: ${movieSelected.ano}',
+                                                    'Ano: ${movieSelected.year}',
                                                   ),
                                                   const SizedBox(height: 20),
                                                   Text(

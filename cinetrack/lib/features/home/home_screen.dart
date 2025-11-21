@@ -249,7 +249,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                             width: double
                                                                 .maxFinite,
                                                             child: Image.network(
-                                                              movie.capa,
+                                                              movie.cover,
                                                               fit: BoxFit
                                                                   .contain,
                                                               alignment:
@@ -271,13 +271,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                movie.generos,
+                                                                movie.genres,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
                                                               ),
                                                               Text(
-                                                                movie.titulo,
+                                                                movie.title,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
@@ -288,7 +288,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                movie.ano,
+                                                                movie.year,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
