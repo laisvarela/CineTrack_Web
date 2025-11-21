@@ -6,7 +6,8 @@ class MovieModel {
   final String directors;
   final String cover;
   final String id;
-
+  final double ratingAverage;
+  final int ratingCount;
   MovieModel({
     required this.title,
     required this.year,
@@ -15,6 +16,8 @@ class MovieModel {
     required this.directors,
     required this.cover,
     required this.id,
+    this.ratingAverage = 0.0,
+    this.ratingCount = 0,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json, {String? id}) {
@@ -26,6 +29,8 @@ class MovieModel {
       genres: json['genero'],
       directors: json['direcao'],
       cover: json['capa'],
+      ratingAverage: json['ratingAverage'],
+      ratingCount: json['ratingCount'],
     );
   }
 }

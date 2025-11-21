@@ -6,14 +6,35 @@ import 'dart:developer';
 
 // repository faz as chamadas para API e esses negócios ai
 
-
 class MovieRepository {
+  late final FirebaseFirestore firebase;
+
+  MovieRepository() {
+    firebase = FirebaseFirestore.instance;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getMovieSnapshot(
+    String movieId,
+  ) {
+    return firebase.collection('movies').doc(movieId).get();
+  }
+
+  Future<void> updateAggregates(
+    String movieId,
+    double ratingAverage,
+    int ratingCount,
+  ) {
+    final movieRef = firebase.collection('movies').doc(movieId);
+    return movieRef.update({
+      'ratingAverage': ratingAverage,
+      'ratingCount': ratingCount,
+    });
+  }
+
   // recebe os dados do Firebase e transforma em uma lista de objeto
   Future<List<MovieModel>> getMovieList() async {
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('movies')
-          .get();
+      final snapshot = await firebase.collection('movies').get();
       if (snapshot.size <= 0) {
         return [];
       }

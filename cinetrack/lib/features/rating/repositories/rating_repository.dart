@@ -52,7 +52,6 @@ class RatingRepository {
         data['id'] = id;
         return RatingModel.fromJson(data);
       }).toList();
-      
     } catch (e) {
       log('Error fetching user ratings', error: e);
       rethrow;
@@ -72,7 +71,6 @@ class RatingRepository {
         data['id'] = id;
         return RatingModel.fromJson(data);
       }).toList();
-      
     } catch (e) {
       log('Error fetching users ratings: ', error: e);
       rethrow;
@@ -84,6 +82,19 @@ class RatingRepository {
       return firestore.collection('ratings').doc(ratingId).delete();
     } catch (error, stackTrace) {
       log('Error deleting rating', error: error, stackTrace: stackTrace);
+    }
+  }
+
+  Future<RatingModel?> getRatingById(String id) async {
+    try {
+      final doc = await firestore.collection('ratings').doc(id).get();
+      if (!doc.exists) return null;
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return RatingModel.fromJson(data);
+    } catch (e, stackTrace) {
+      log('Error fetching rating by id: $id', error: e, stackTrace: stackTrace);
+      rethrow;
     }
   }
 }
