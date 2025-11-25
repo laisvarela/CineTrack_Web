@@ -4,6 +4,7 @@ import 'package:cinetrack/features/auth/routes/auth_routes.dart';
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
 import 'package:cinetrack/features/movie/movie_screen.dart';
 import 'package:cinetrack/features/user/controllers/user_controller.dart';
+import 'package:cinetrack/features/user/user_ratings_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +43,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         titleTextStyle: Theme.of(context).textTheme.bodyLarge,
         actions: [
+          TextButton(
+            onPressed: () {
+              // abre tela Minhas Avaliações
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const UserRatingsScreen()),
+              );
+            },
+            child: Text(
+              'Minhas avaliações',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
           TextButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
@@ -224,10 +237,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     onTap: () {
                                                       final movieId = movie.id;
                                                       // volta até a rota raiz e então abre a tela do filme
-                                                      Navigator.of(context).popUntil((route) => route.isFirst);
-                                                      Navigator.of(context).push(
+                                                      Navigator.of(
+                                                        context,
+                                                      ).popUntil(
+                                                        (route) =>
+                                                            route.isFirst,
+                                                      );
+                                                      Navigator.of(
+                                                        context,
+                                                      ).push(
                                                         MaterialPageRoute(
-                                                          builder: (_) => MovieScreen(movieId: movieId),
+                                                          builder: (_) =>
+                                                              MovieScreen(
+                                                                movieId:
+                                                                    movieId,
+                                                              ),
                                                         ),
                                                       );
                                                     },
@@ -290,18 +314,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                                     TextOverflow
                                                                         .visible,
                                                               ),
-                                                              const SizedBox(height: 6),
+                                                              const SizedBox(
+                                                                height: 6,
+                                                              ),
                                                               Row(
                                                                 children: [
                                                                   Icon(
                                                                     Icons.star,
                                                                     size: 16,
-                                                                    color: const Color(0xFFFFCB45),
+                                                                    color: const Color(
+                                                                      0xFFFFCB45,
+                                                                    ),
                                                                   ),
-                                                                  const SizedBox(width: 6),
+                                                                  const SizedBox(
+                                                                    width: 6,
+                                                                  ),
                                                                   Text(
                                                                     '${movie.ratingAverage.toStringAsFixed(1)} (${movie.ratingCount})',
-                                                                    style: Theme.of(context).textTheme.bodyMedium,
+                                                                    style: Theme.of(
+                                                                      context,
+                                                                    ).textTheme.bodyMedium,
                                                                   ),
                                                                 ],
                                                               ),

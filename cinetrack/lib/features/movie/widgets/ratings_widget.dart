@@ -58,7 +58,7 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
-                if (userId != null)
+                if (userId != null && userRole != 'admin')
                   ElevatedButton(
                     onPressed: () async {
                       await showRatingEditorDialog(
