@@ -29,8 +29,8 @@ class MovieModel {
       genres: json['genero'],
       directors: json['direcao'],
       cover: json['capa'],
-      ratingAverage: json['ratingAverage'],
-      ratingCount: json['ratingCount'],
+      ratingAverage: json['ratingAverage'] ?? 0,
+      ratingCount: json['ratingCount'] ?? 0,
     );
   }
 }

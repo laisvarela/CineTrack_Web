@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cinetrack/features/rating/models/rating_model.dart';
 import 'package:cinetrack/features/rating/repositories/rating_repository.dart';
