@@ -69,7 +69,9 @@ Future<void> showRatingEditorDialog({
                     rating: ratingValue,
                     comment: comment.isEmpty ? null : comment,
                   );
-                  ref.read(createRatingProvider.notifier).create(createModel);
+                  if (context.mounted) {
+                    ref.read(createRatingProvider.notifier).create(createModel);
+                  }
                 } else {
                   final updateModel = UpdateRatingModel(
                     id: rating.id,
@@ -78,16 +80,21 @@ Future<void> showRatingEditorDialog({
                     rating: ratingValue,
                     comment: comment.isEmpty ? null : comment,
                   );
+                  if (!context.mounted) return;
                   ref
                       .read(updateRatingControllerProvider.notifier)
                       .updateRating(updateModel);
                 }
-                Navigator.of(ctx).pop();
+                // usa o context recebido pela função externa e valida mounted
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               } catch (e) {
-                // opcional: mostrar erro
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Erro: $e')));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Erro: $e')));
+                }
               }
             },
             child: const Text('Salvar'),

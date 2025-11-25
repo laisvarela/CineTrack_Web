@@ -1,4 +1,3 @@
-
 import 'package:cinetrack/features/rating/models/create_rating_model.dart';
 
 import 'package:cinetrack/features/rating/models/update_rating_model.dart';
@@ -20,8 +19,11 @@ class RatingService {
     // lê o documento do filme para obter agregados atuais
     final movieSnap = await _movieRepository.getMovieSnapshot(rating.movieId);
     final data = movieSnap.data() ?? <String, dynamic>{};
-    final oldAvg = (data['ratingAverage'] ?? 0).toDouble();
-    final oldCount = (data['ratingCount'] ?? 0) as int;
+    // parsing seguro: ratingAverage pode ser int/double/string; ratingCount pode ser int/double/string/nulo
+    final oldAvgRaw = data['ratingAverage'] ?? 0;
+    final oldAvg = oldAvgRaw is num ? (oldAvgRaw).toDouble() : double.tryParse(oldAvgRaw?.toString() ?? '') ?? 0.0;
+    final oldCountRaw = data['ratingCount'] ?? 0;
+    final oldCount = oldCountRaw is num ? (oldCountRaw).toInt() : int.tryParse(oldCountRaw?.toString() ?? '') ?? 0;
 
     final newCount = oldCount + 1;
     final newAvg = (oldAvg * oldCount + rating.rating) / newCount;
@@ -47,8 +49,10 @@ class RatingService {
       updatedRating.movieId,
     );
     final data = movieSnap.data() ?? <String, dynamic>{};
-    final oldAvg = (data['ratingAverage'] ?? 0).toDouble();
-    final count = (data['ratingCount'] ?? 0) as int;
+    final oldAvgRaw = data['ratingAverage'] ?? 0;
+    final oldAvg = oldAvgRaw is num ? (oldAvgRaw).toDouble() : double.tryParse(oldAvgRaw?.toString() ?? '') ?? 0.0;
+    final countRaw = data['ratingCount'] ?? 0;
+    final count = countRaw is num ? (countRaw).toInt() : int.tryParse(countRaw?.toString() ?? '') ?? 0;
 
     // proteção: se count == 0, recalcule lendo todas as avaliações ou defina newAvg = updatedRating.rating
     final newAvg = count == 0
@@ -60,5 +64,37 @@ class RatingService {
       newAvg,
       count,
     );
+  }
+
+  /// deleta uma avaliação e atualiza os agregados do movie
+  Future<void> deleteRatingAndUpdateMovie(String ratingId) async {
+    // 1) busca avaliação antiga
+    final old = await _ratingRepository.getRatingById(ratingId);
+    if (old == null) {
+      // nada a fazer
+      return;
+    }
+
+    // 2) deleta a avaliação
+    await _ratingRepository.deleteRating(ratingId: ratingId);
+
+    // 3) atualiza agregados do filme
+    final movieSnap = await _movieRepository.getMovieSnapshot(old.movieId);
+    final data = movieSnap.data() ?? <String, dynamic>{};
+    final oldAvgRaw = data['ratingAverage'] ?? 0;
+    final oldAvg = oldAvgRaw is num
+        ? (oldAvgRaw).toDouble()
+        : double.tryParse(oldAvgRaw?.toString() ?? '') ?? 0.0;
+    final countRaw = data['ratingCount'] ?? 0;
+    final oldCount = countRaw is num
+        ? (countRaw).toInt()
+        : int.tryParse(countRaw?.toString() ?? '') ?? 0;
+
+    final newCount = (oldCount - 1) < 0 ? 0 : (oldCount - 1);
+    final newAvg = newCount == 0
+        ? 0.0
+        : (oldAvg * oldCount - old.rating) / newCount;
+
+    await _movieRepository.updateAggregates(old.movieId, newAvg, newCount);
   }
 }

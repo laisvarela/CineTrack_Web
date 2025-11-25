@@ -34,4 +34,21 @@ class UserRepository {
     final u = await getUser();
     return u?.name;
   }
+
+  /// Busca o nome do usuário pelo id (null-safe).
+  Future<String?> getUserNameById(String userId) async {
+    try {
+      if (userId.isEmpty) return null;
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      final data = doc.data();
+      if (data == null) return null;
+      return data['name'] as String?;
+    } catch (e) {
+      log('Error on getUserNameById: $e');
+      return null;
+    }
+  }
 }

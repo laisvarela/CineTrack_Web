@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cinetrack/features/rating/models/create_rating_model.dart';
-import 'package:cinetrack/features/rating/repositories/rating_repository.dart';
+import 'package:cinetrack/features/rating/services/rating_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final createRatingProvider =
@@ -18,7 +18,7 @@ class CreateRatingController extends AutoDisposeAsyncNotifier<void> {
   void create(CreateRatingModel rating) async {
     try {
       state = AsyncValue.loading();
-      await RatingRepository().createRating(rating: rating);
+      await RatingService().createRatingAndUpdateMovie(rating);
       // como o provider é do tipo null, o success é sinalizado com null também
       state = AsyncValue.data(null);
     } catch (error, stackTrace) {

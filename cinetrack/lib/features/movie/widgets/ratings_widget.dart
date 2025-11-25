@@ -92,8 +92,15 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                   vertical: 6,
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: função para adicionar avaliação
+                  onPressed: () async {
+                    await showRatingEditorDialog(
+                      context: context,
+                      ref: ref,
+                      movieId: widget.movieId,
+                      userId: userId,
+                      rating: null,
+                    );
+                    if (mounted) setState(() {}); // refaz a FutureBuilder
                   },
                   child: const Text('Adicionar avaliação'),
                 ),
@@ -116,12 +123,34 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                           children: [
                             const Icon(Icons.person, size: 18),
                             const SizedBox(width: 8),
+
                             Expanded(
-                              child: Text(
-                                r.userName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              child: FutureBuilder<String?>(
+                                future: r.userId == userId
+                                    ? ref
+                                          .read(userRepositoryProviver)
+                                          .getUserName()
+                                    : ref
+                                          .read(userRepositoryProviver)
+                                          .getUserNameById(r.userId),
+                                builder: (ctx, snap) {
+                                  if (snap.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Text(
+                                      'Carregando...',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    );
+                                  }
+                                  final name = snap.data ?? 'Usuário';
+                                  return Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -159,13 +188,33 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                     ),
                                   );
                                   if (ok == true) {
-                                    ref
-                                        .read(
-                                          deleteRatingControllerProvider
-                                              .notifier,
-                                        )
-                                        .deleteRating(r.id);
-                                    setState(() {});
+                                    try {
+                                      await ref
+                                          .read(
+                                            deleteRatingControllerProvider
+                                                .notifier,
+                                          )
+                                          .deleteRating(r.id);
+                                      if (mounted)
+                                        setState(() {}); // atualiza lista
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Avaliação removida'),
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(content: Text('Erro: $e')),
+                                        );
+                                      }
+                                    }
                                   }
                                 },
                                 tooltip: 'Remover avaliação',
@@ -211,13 +260,33 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                     ),
                                   );
                                   if (ok == true) {
-                                    ref
-                                        .read(
-                                          deleteRatingControllerProvider
-                                              .notifier,
-                                        )
-                                        .deleteRating(r.id);
-                                    setState(() {});
+                                    try {
+                                      await ref
+                                          .read(
+                                            deleteRatingControllerProvider
+                                                .notifier,
+                                          )
+                                          .deleteRating(r.id);
+                                      if (mounted)
+                                        setState(() {}); // atualiza lista
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Avaliação removida'),
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(content: Text('Erro: $e')),
+                                        );
+                                      }
+                                    }
                                   }
                                 },
                                 tooltip: 'Remover avaliação',

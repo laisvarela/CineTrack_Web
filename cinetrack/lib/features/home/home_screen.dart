@@ -223,14 +223,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                   child: InkWell(
                                                     onTap: () {
                                                       final movieId = movie.id;
-                                                      Navigator.push(
-                                                        context,
+                                                      // volta até a rota raiz e então abre a tela do filme
+                                                      Navigator.of(context).popUntil((route) => route.isFirst);
+                                                      Navigator.of(context).push(
                                                         MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              MovieScreen(
-                                                                movieId:
-                                                                    movieId,
-                                                              ),
+                                                          builder: (_) => MovieScreen(movieId: movieId),
                                                         ),
                                                       );
                                                     },
@@ -292,6 +289,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
+                                                              ),
+                                                              const SizedBox(height: 6),
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons.star,
+                                                                    size: 16,
+                                                                    color: const Color(0xFFFFCB45),
+                                                                  ),
+                                                                  const SizedBox(width: 6),
+                                                                  Text(
+                                                                    '${movie.ratingAverage.toStringAsFixed(1)} (${movie.ratingCount})',
+                                                                    style: Theme.of(context).textTheme.bodyMedium,
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ],
                                                           ),

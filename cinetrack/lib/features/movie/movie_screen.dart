@@ -1,4 +1,6 @@
 import 'package:cinetrack/core/asset_images.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cinetrack/features/auth/routes/auth_routes.dart';
 import 'package:cinetrack/features/movie/controllers/movie_controller.dart';
 import 'package:cinetrack/features/movie/models/movie_model.dart';
 import 'package:cinetrack/features/movie/widgets/ratings_widget.dart';
@@ -17,199 +19,235 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     final movies = ref.watch(movieControllerProvider);
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipOval(child: Image.asset(AssetImages.mainIcon)),
-        ),
-        title: Text(
-          'CineTrack',
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight:
-                MediaQuery.of(context).size.height -
-                kToolbarHeight -
-                MediaQuery.of(context).padding.top,
-          ),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                colors: [
-                  Color.fromARGB(255, 72, 49, 118),
-                  Color.fromARGB(255, 18, 16, 58),
-                ],
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        // força reload da Home ao voltar
+        ref.invalidate(movieControllerProvider);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          // espaço suficiente para a seta + logo
+          leadingWidth: 120,
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  // invalida lista de filmes e volta para a Home
+                  ref.invalidate(movieControllerProvider);
+                  Navigator.of(context).pop();
+                },
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, right: 8),
+                child: ClipOval(
+                  child: Image.asset(AssetImages.mainIcon, width: 36, height: 36),
+                ),
+              ),
+            ],
+          ),
+          title: Text(
+            'CineTrack',
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                if (!context.mounted) return;
+                Navigator.of(context).popUntil((_) => false);
+                Navigator.pushNamed(context, AuthRoutes.login);
+              },
+              child: Text('Sair', style: Theme.of(context).textTheme.bodyMedium),
             ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Descubra filmes incríveis',
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                    Text(
-                      'Avalie e explore o mundo do cinema',
-                      style: Theme.of(context).textTheme.displayMedium
-                          ?.copyWith(
-                            color: const Color.fromARGB(255, 214, 214, 214),
-                          ),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.star),
-                        Icon(Icons.star),
-                        Icon(Icons.star),
-                        Icon(Icons.star),
-                        Icon(Icons.star),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: LayoutBuilder(
-                        builder: (context, inner) {
-                          final maxWidth = inner.maxWidth > 1100
-                              ? 1000.0
-                              : inner.maxWidth * 0.95;
-                          return Container(
-                            width: maxWidth,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  MediaQuery.of(context).size.height -
+                  kToolbarHeight -
+                  MediaQuery.of(context).padding.top,
+            ),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  colors: [
+                    Color.fromARGB(255, 72, 49, 118),
+                    Color.fromARGB(255, 18, 16, 58),
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Descubra filmes incríveis',
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
+                      Text(
+                        'Avalie e explore o mundo do cinema',
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(
+                              color: const Color.fromARGB(255, 214, 214, 214),
                             ),
-                            child: movies.when(
-                              data: (movieList) {
-                                MovieModel? movieSelected;
-                                if (widget.movieId != null) {
-                                  movieSelected = movieList.firstWhere(
-                                    (m) => m.id == widget.movieId,
-                                  );
-                                } else {
-                                  movieSelected = movieList.isNotEmpty
-                                      ? movieList.first
-                                      : null;
-                                }
-                                if (movieSelected == null) {
-                                  return const Center(
-                                    child: Text('Filme não encontrado'),
-                                  );
-                                }
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.star),
+                          Icon(Icons.star),
+                          Icon(Icons.star),
+                          Icon(Icons.star),
+                          Icon(Icons.star),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (context, inner) {
+                            final maxWidth = inner.maxWidth > 1100
+                                ? 1000.0
+                                : inner.maxWidth * 0.95;
+                            return Container(
+                              width: maxWidth,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.white12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: movies.when(
+                                data: (movieList) {
+                                  MovieModel? movieSelected;
+                                  if (widget.movieId != null) {
+                                    movieSelected = movieList.firstWhere(
+                                      (m) => m.id == widget.movieId,
+                                    );
+                                  } else {
+                                    movieSelected = movieList.isNotEmpty
+                                        ? movieList.first
+                                        : null;
+                                  }
+                                  if (movieSelected == null) {
+                                    return const Center(
+                                      child: Text('Filme não encontrado'),
+                                    );
+                                  }
 
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Card(
-                                          clipBehavior: Clip.hardEdge,
-                                          child: Image.network(
-                                            movieSelected.cover,
-                                            fit: BoxFit.contain,
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Card(
+                                            clipBehavior: Clip.hardEdge,
+                                            child: Image.network(
+                                              movieSelected.cover,
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Expanded(
-                                          child: Card(
-                                            elevation: 2,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(
-                                                16.0,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Título: ${movieSelected.title}',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleLarge
-                                                        ?.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 20),
-                                                  Text(
-                                                    'Gênero: ${movieSelected.genres}',
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    'Direção: ${movieSelected.directors}',
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    'Ano: ${movieSelected.year}',
-                                                  ),
-                                                  const SizedBox(height: 20),
-                                                  Text(
-                                                    'Sinopse:',
-                                                    style: Theme.of(
-                                                      context,
-                                                    ).textTheme.titleSmall,
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    movieSelected.sinopse,
-                                                    overflow:
-                                                        TextOverflow.visible,
-                                                  ),
-                                                ],
+                                          const SizedBox(width: 20),
+                                          Expanded(
+                                            child: Card(
+                                              elevation: 2,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16.0,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Título: ${movieSelected.title}',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleLarge
+                                                          ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Text(
+                                                      'Gênero: ${movieSelected.genres}',
+                                                    ),
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      'Direção: ${movieSelected.directors}',
+                                                    ),
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      'Ano: ${movieSelected.year}',
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Text(
+                                                      'Sinopse:',
+                                                      style: Theme.of(
+                                                        context,
+                                                      ).textTheme.titleSmall,
+                                                    ),
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      movieSelected.sinopse,
+                                                      overflow:
+                                                          TextOverflow.visible,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
 
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      'Avaliações',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleLarge,
-                                    ),
-                                    const SizedBox(height: 12),
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        'Avaliações',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge,
+                                      ),
+                                      const SizedBox(height: 12),
 
-                                    RatingsWidget(movieId: movieSelected.id),
-                                  ],
-                                );
-                              },
-                              loading: () => const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 40),
-                                  child: CircularProgressIndicator(),
+                                      RatingsWidget(movieId: movieSelected.id),
+                                    ],
+                                  );
+                                },
+                                loading: () => const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 40),
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 ),
+                                error: (e, st) => Center(child: Text('Erro: $e')),
                               ),
-                              error: (e, st) => Center(child: Text('Erro: $e')),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
