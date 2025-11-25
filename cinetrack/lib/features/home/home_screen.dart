@@ -42,29 +42,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           error: (error, stackTrace) => Text('Olá'),
         ),
         titleTextStyle: Theme.of(context).textTheme.bodyLarge,
-        actions: [
-          TextButton(
-            onPressed: () {
-              // abre tela Minhas Avaliações
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const UserRatingsScreen()),
-              );
-            },
-            child: Text(
-              'Minhas avaliações',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              if (!context.mounted) return;
-              Navigator.of(context).popUntil((_) => false);
-              Navigator.pushNamed(context, AuthRoutes.login);
-            },
-            child: Text('Sair', style: Theme.of(context).textTheme.bodyMedium),
-          ),
-        ],
+        actions: user.when(
+          data: (u) {
+            final role = (u?.role ?? '').toLowerCase();
+            return [
+              if (role != 'admin')
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const UserRatingsScreen()),
+                    );
+                  },
+                  child: Text(
+                    'Minhas avaliações',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              TextButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  if (!context.mounted) return;
+                  Navigator.of(context).popUntil((_) => false);
+                  Navigator.pushNamed(context, AuthRoutes.login);
+                },
+                child: Text('Sair', style: Theme.of(context).textTheme.bodyMedium),
+              ),
+            ];
+          },
+          loading: () => [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
+            )
+          ],
+          error: (e, st) => [
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                if (!context.mounted) return;
+                Navigator.of(context).popUntil((_) => false);
+                Navigator.pushNamed(context, AuthRoutes.login);
+              },
+              child: Text('Sair', style: Theme.of(context).textTheme.bodyMedium),
+            )
+          ],
+        ),
       ),
 
       body: LayoutBuilder(
