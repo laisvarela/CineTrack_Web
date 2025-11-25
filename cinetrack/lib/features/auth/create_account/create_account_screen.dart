@@ -15,6 +15,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +130,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           ),
                           TextFormField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               hintText: 'Digite sua senha',
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
