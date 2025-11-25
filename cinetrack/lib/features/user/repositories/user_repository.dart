@@ -26,6 +26,7 @@ class UserRepository {
 
   Future<String?> getUserRole() async {
     final u = await getUser();
+    log('UserRole repository: ${u?.role}');
     return u?.role;
   }
 

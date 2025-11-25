@@ -97,4 +97,27 @@ class RatingRepository {
       rethrow;
     }
   }
+
+  Future<List<RatingModel>> getRatingsForMovie({required String movieId}) async {
+    try {
+      final snapshot = await firestore
+          .collection('ratings')
+          .where('movieId', isEqualTo: movieId)
+          .get();
+      log('Movie selected: $movieId');
+      if (snapshot.size <= 0) return [];
+
+      log('Success fetching ratings for movie $movieId: ${snapshot.size}');
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        final id = doc.id;
+        data['id'] = id;
+        return RatingModel.fromJson(data);
+      }).toList();
+    } catch (e, st) {
+      log('Error fetching ratings for movie $movieId', error: e, stackTrace: st);
+      rethrow;
+    }
+  }
+
 }
