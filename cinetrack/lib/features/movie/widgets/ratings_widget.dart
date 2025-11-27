@@ -33,8 +33,9 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
       _error = null;
     });
     try {
-      final ratings = await RatingRepository()
-          .getRatingsForMovie(movieId: widget.movieId);
+      final ratings = await RatingRepository().getRatingsForMovie(
+        movieId: widget.movieId,
+      );
       if (mounted) {
         setState(() {
           _cachedRatings = ratings;
@@ -90,7 +91,7 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                             context: context,
                             ref: ref,
                             movieId: widget.movieId,
-                            userId: userId!,
+                            userId: userId,
                             rating: null,
                           );
                           setState(() {}); // refaz a FutureBuilder
@@ -106,7 +107,8 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
             final bool hasUserRating =
                 userId != null && _cachedRatings.any((r) => r.userId == userId);
 
-            final bool isOwn = userId != null && _cachedRatings.any((r) => r.userId == userId);
+            final bool isOwn =
+                userId != null && _cachedRatings.any((r) => r.userId == userId);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -225,14 +227,17 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                                     .notifier,
                                               )
                                               .deleteRating(r.id);
-                                          if (mounted)
+                                          if (mounted) {
                                             setState(() {}); // atualiza lista
+                                          }
                                           if (context.mounted) {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
                                               const SnackBar(
-                                                content: Text('Avaliação removida'),
+                                                content: Text(
+                                                  'Avaliação removida',
+                                                ),
                                               ),
                                             );
                                           }
@@ -241,7 +246,9 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
-                                              SnackBar(content: Text('Erro: $e')),
+                                              SnackBar(
+                                                content: Text('Erro: $e'),
+                                              ),
                                             );
                                           }
                                         }
@@ -297,14 +304,17 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                                     .notifier,
                                               )
                                               .deleteRating(r.id);
-                                          if (mounted)
+                                          if (mounted) {
                                             setState(() {}); // atualiza lista
+                                          }
                                           if (context.mounted) {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
                                               const SnackBar(
-                                                content: Text('Avaliação removida'),
+                                                content: Text(
+                                                  'Avaliação removida',
+                                                ),
                                               ),
                                             );
                                           }
@@ -313,7 +323,9 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
-                                              SnackBar(content: Text('Erro: $e')),
+                                              SnackBar(
+                                                content: Text('Erro: $e'),
+                                              ),
                                             );
                                           }
                                         }

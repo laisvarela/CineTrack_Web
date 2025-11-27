@@ -1,4 +1,3 @@
-import 'package:cinetrack/features/auth/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinetrack/features/movie/widgets/star_rating.dart';
