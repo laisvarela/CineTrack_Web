@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // .env removido - use firebase_options.dart e variáveis de ambiente do Vercel
+  // Removido dotenv - só funciona localmente, não no Flutter Web
   await Future.wait([
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
