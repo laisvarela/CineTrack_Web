@@ -9,3 +9,7 @@ final userRepositoryProviver = Provider<UserRepository>((ref) {
 final userControllerProvider = FutureProvider.autoDispose<UserModel?>((ref) {
   return ref.watch(userRepositoryProviver).getUser();
 });
+
+final userRoleProvider = FutureProvider.autoDispose<String?>((ref) {
+  return ref.watch(userRepositoryProviver).getUserRole();
+});

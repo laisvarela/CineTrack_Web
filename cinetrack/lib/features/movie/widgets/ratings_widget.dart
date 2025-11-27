@@ -54,7 +54,6 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // userId obtido síncronamente via AuthRepository
     final currentUser = AuthRepository().getCurrentUser();
     final String? userId = currentUser?.uid;
 
@@ -67,11 +66,12 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
 
     return Consumer(
       builder: (context, ref, child) {
-        final userRole = ref.watch(userRepositoryProviver).getUserRole();
-        return FutureBuilder<String?>(
-          future: userRole,
-          builder: (context, roleSnapshot) {
-            final role = roleSnapshot.data;
+        final userRoleAsync = ref.watch(userRoleProvider); // ← novo provider assíncrono
+
+        return userRoleAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, st) => Center(child: Text('Erro: $e')),
+          data: (role) {
             // se não há avaliações: mostra mensagem + botão para adicionar (função vazia)
             if (_cachedRatings.isEmpty) {
               return Padding(
