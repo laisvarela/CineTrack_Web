@@ -15,14 +15,10 @@ class CreateRatingController extends AutoDisposeAsyncNotifier<void> {
     return null;
   }
 
-  void create(CreateRatingModel rating) async {
-    try {
-      state = AsyncValue.loading();
+  Future<void> create(CreateRatingModel rating) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
       await RatingService().createRatingAndUpdateMovie(rating);
-      // como o provider é do tipo null, o success é sinalizado com null também
-      state = AsyncValue.data(null);
-    } catch (error, stackTrace) {
-      state = AsyncValue.error(error, stackTrace);
-    }
+    });
   }
 }

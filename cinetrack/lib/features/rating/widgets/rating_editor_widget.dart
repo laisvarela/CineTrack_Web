@@ -1,3 +1,4 @@
+import 'package:cinetrack/features/auth/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinetrack/features/movie/widgets/star_rating.dart';
@@ -70,7 +71,12 @@ Future<void> showRatingEditorDialog({
                     comment: comment.isEmpty ? null : comment,
                   );
                   if (context.mounted) {
-                    ref.read(createRatingProvider.notifier).create(createModel);
+                    await ref
+                        .read(createRatingProvider.notifier)
+                        .create(createModel);
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
                   }
                 } else {
                   final updateModel = UpdateRatingModel(

@@ -12,6 +12,11 @@ class RatingRepository {
     firestore = FirebaseFirestore.instance;
   }
 
+  // Cache simples para evitar múltiplas requisições
+  final Map<String, List<RatingModel>> _cache = {};
+  final Map<String, DateTime> _cacheTimestamps = {};
+  static const _cacheTimeout = Duration(minutes: 2);
+
   Future<void> createRating({required CreateRatingModel rating}) async {
     try {
       final docRef = await firestore.collection('ratings').add(rating.toMap());
@@ -99,6 +104,15 @@ class RatingRepository {
   }
 
   Future<List<RatingModel>> getRatingsForMovie({required String movieId}) async {
+    // Verifica cache válido
+    final now = DateTime.now();
+    if (_cache.containsKey(movieId) && _cacheTimestamps.containsKey(movieId)) {
+      final cacheTime = _cacheTimestamps[movieId]!;
+      if (now.difference(cacheTime) < _cacheTimeout) {
+        return _cache[movieId]!;
+      }
+    }
+
     try {
       final snapshot = await firestore
           .collection('ratings')
@@ -108,16 +122,21 @@ class RatingRepository {
       if (snapshot.size <= 0) return [];
 
       log('Success fetching ratings for movie $movieId: ${snapshot.size}');
-      return snapshot.docs.map((doc) {
+      final ratings = snapshot.docs.map((doc) {
         final data = doc.data();
         final id = doc.id;
         data['id'] = id;
         return RatingModel.fromJson(data);
       }).toList();
+
+      // Atualiza cache
+      _cache[movieId] = ratings;
+      _cacheTimestamps[movieId] = now;
+
+      return ratings;
     } catch (e, st) {
       log('Error fetching ratings for movie $movieId', error: e, stackTrace: st);
       rethrow;
     }
   }
-
 }
