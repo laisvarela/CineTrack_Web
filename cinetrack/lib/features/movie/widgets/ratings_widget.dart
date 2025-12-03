@@ -14,7 +14,7 @@ class RatingsWidget extends ConsumerStatefulWidget {
   @override
   ConsumerState<RatingsWidget> createState() => _RatingsWidgetState();
 }
-
+// 
 class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
   @override
   Widget build(BuildContext context) {
