@@ -4,8 +4,7 @@ import 'package:cinetrack/features/movie/widgets/star_rating.dart';
 import 'package:cinetrack/features/rating/models/create_rating_model.dart';
 import 'package:cinetrack/features/rating/models/update_rating_model.dart';
 import 'package:cinetrack/features/rating/models/rating_model.dart';
-import 'package:cinetrack/features/rating/controllers/create_rating_controller.dart';
-import 'package:cinetrack/features/rating/controllers/update_rating_controller.dart';
+import 'package:cinetrack/core/page_web.dart';
 
 /// Abre um dialog para criar/editar uma avaliação.
 /// - se [rating] == null => cria nova avaliação (usará [`CreateRatingModel`](cinetrack/lib/features/rating/models/create_rating_model.dart))
@@ -16,7 +15,9 @@ Future<void> showRatingEditorDialog({
   required String movieId,
   required String userId,
   RatingModel? rating,
+  PageWeb? pageWeb,
 }) {
+  final web = pageWeb ?? ref.read(pageWebProvider);
   final initialRating = rating?.rating ?? 0.0;
   final commentController = TextEditingController(text: rating?.comment ?? '');
   double ratingValue = initialRating;
@@ -70,9 +71,7 @@ Future<void> showRatingEditorDialog({
                     comment: comment.isEmpty ? null : comment,
                   );
                   if (context.mounted) {
-                    await ref
-                        .read(createRatingProvider.notifier)
-                        .create(createModel);
+                    await web?.createRatingController.create(createModel);
                     if (context.mounted) {
                       Navigator.of(context).pop();
                     }
@@ -86,13 +85,10 @@ Future<void> showRatingEditorDialog({
                     comment: comment.isEmpty ? null : comment,
                   );
                   if (!context.mounted) return;
-                  ref
-                      .read(updateRatingControllerProvider.notifier)
-                      .updateRating(updateModel);
-                }
-                // usa o context recebido pela função externa e valida mounted
-                if (context.mounted) {
-                  Navigator.of(context).pop();
+                  web?.updateRatingController.updateRating(updateModel);
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
                 }
               } catch (e) {
                 if (context.mounted) {
