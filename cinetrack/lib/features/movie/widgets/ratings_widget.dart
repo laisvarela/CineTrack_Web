@@ -39,9 +39,8 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
       _error = null;
     });
     try {
-      final ratings = await RatingRepository().getRatingsForMovie(
-        movieId: widget.movieId,
-      );
+      final ratings = await RatingRepository()
+          .getRatingsForMovie(movieId: widget.movieId);
       if (mounted) {
         setState(() {
           _cachedRatings = ratings;
@@ -60,6 +59,7 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // userId obtido síncronamente via AuthRepository
     final currentUser = AuthRepository().getCurrentUser();
     final String? userId = currentUser?.uid;
 
@@ -107,9 +107,9 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
           );
         }
 
-        // existe pelo menos uma avaliação
-        final bool hasUserRating =
-            userId != null && _cachedRatings.any((r) => r.userId == userId);
+            // existe pelo menos uma avaliação
+            final bool hasUserRating =
+                userId != null && _cachedRatings.any((r) => r.userId == userId);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,8 +158,10 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.person, size: 18),
-                            const SizedBox(width: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.person, size: 18),
+                                const SizedBox(width: 8),
 
                             Expanded(
                               child: _UserNameWidget(
@@ -265,10 +267,42 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                               Navigator.of(ctx).pop(false),
                                           child: const Text('Não'),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () =>
-                                              Navigator.of(ctx).pop(true),
-                                          child: const Text('Sim'),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  r.rating.toStringAsFixed(1),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                // admin pode remover qualquer avaliação
+                                if (role == 'admin') ...[
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, size: 20),
+                                    onPressed: () async {
+                                      final ok = await showDialog<bool>(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text('Confirmar'),
+                                          content: const Text(
+                                            'Deseja excluir essa avaliação?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx).pop(false),
+                                              child: const Text('Não'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx).pop(true),
+                                              child: const Text('Sim'),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -280,42 +314,97 @@ class _RatingsWidgetState extends ConsumerState<RatingsWidget> {
                                       if (mounted) {
                                         _loadRatings(); // recarrega dados
                                       }
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Avaliação removida'),
+                                    },
+                                    tooltip: 'Remover avaliação',
+                                  ),
+                                ] else if (isOwn) ...[
+                                  // usuário comum: só editar/remover na própria avaliação
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, size: 20),
+                                    onPressed: () async {
+                                      await showRatingEditorDialog(
+                                        context: context,
+                                        ref: ref,
+                                        movieId: widget.movieId,
+                                        userId: userId,
+                                        rating: r,
+                                      );
+                                      setState(() {});
+                                    },
+                                    tooltip: 'Editar avaliação',
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, size: 20),
+                                    onPressed: () async {
+                                      final ok = await showDialog<bool>(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text('Confirmar'),
+                                          content: const Text(
+                                            'Deseja excluir essa avaliação?',
                                           ),
-                                        );
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx).pop(false),
+                                              child: const Text('Não'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  Navigator.of(ctx).pop(true),
+                                              child: const Text('Sim'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (ok == true) {
+                                        try {
+                                          await ref
+                                              .read(
+                                                deleteRatingControllerProvider
+                                                    .notifier,
+                                              )
+                                              .deleteRating(r.id);
+                                          if (mounted)
+                                            setState(() {}); // atualiza lista
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Avaliação removida'),
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(content: Text('Erro: $e')),
+                                            );
+                                          }
+                                        }
                                       }
-                                    } catch (e) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(content: Text('Erro: $e')),
-                                        );
-                                      }
-                                    }
-                                  }
-                                },
-                                tooltip: 'Remover avaliação',
-                              ),
+                                    },
+                                    tooltip: 'Remover avaliação',
+                                  ),
+                                ],
+                              ],
+                            ),
+                            if (r.comment != null && r.comment!.isNotEmpty) ...[
+                              const SizedBox(height: 8),
+                              Text(r.comment!),
                             ],
                           ],
                         ),
-                        if (r.comment != null && r.comment!.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          Text(r.comment!),
-                        ],
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );

@@ -19,12 +19,12 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     final movies = ref.watch(movieControllerProvider);
-    return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          // força reload da Home ao voltar
-          ref.invalidate(movieControllerProvider);
-        }
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        // força reload da Home ao voltar
+        ref.invalidate(movieControllerProvider);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -44,11 +44,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 4, right: 8),
                 child: ClipOval(
-                  child: Image.asset(
-                    AssetImages.mainIcon,
-                    width: 36,
-                    height: 36,
-                  ),
+                  child: Image.asset(AssetImages.mainIcon, width: 36, height: 36),
                 ),
               ),
             ],
@@ -65,10 +61,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                 Navigator.of(context).popUntil((_) => false);
                 Navigator.pushNamed(context, AuthRoutes.login);
               },
-              child: Text(
-                'Sair',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              child: Text('Sair', style: Theme.of(context).textTheme.bodyMedium),
             ),
           ],
         ),
@@ -160,8 +153,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                   }
 
                                   return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         crossAxisAlignment:
@@ -248,8 +240,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
                                     child: CircularProgressIndicator(),
                                   ),
                                 ),
-                                error: (e, st) =>
-                                    Center(child: Text('Erro: $e')),
+                                error: (e, st) => Center(child: Text('Erro: $e')),
                               ),
                             );
                           },
